@@ -322,7 +322,9 @@ The pipelines are scheduled to run automatically, but you can also trigger them 
 #### Running Backfills
 
 To process historical data:
-images/trigger_backfill_manually.jpg
+
+![Trigger Backfill Manually](images/trigger_backfill_manually.jpg)
+
 1. 5-minute pipeline:
    - Go to the Airflow UI
    - Click the "Trigger DAG" button
@@ -420,6 +422,12 @@ playstudio-data-pipeline/
 │   ├── docker-compose.yaml       # Infrastructure definition
 │   ├── Dockerfile                # Airflow container setup
 │   └── requirements.txt          # Python dependencies
+│
+├── images/                       # Screenshots and instructional images
+│   └── trigger_backfill_manually.jpg  # UI guidance for triggering backfills
+│
+├── docs/                         # Documentation files
+│   └── architecture_diagram.png  # System architecture diagram
 │
 └── .env                          # Environment variables
 ```
