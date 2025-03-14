@@ -9,7 +9,7 @@ playstudio_project:
       threads: 1
       type: postgres
       user: airflow
-    dev:
+    local:
       dbname: warehouse_db
       host: localhost
       pass: airflow
@@ -18,7 +18,7 @@ playstudio_project:
       threads: 1
       type: postgres
       user: airflow
-  target: dev
+  target: local
 
         # pass: airflow
 

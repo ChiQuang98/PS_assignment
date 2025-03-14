@@ -30,6 +30,8 @@ logger = logging.getLogger(__name__)
 HOURLY_DAG_ID = "hourly_processing_pipeline"
 warehouse_connection_id = DB_CONFIG["connections"]["warehouse"]
 source_connection_id = DB_CONFIG["connections"]["source"]
+DEFAULT_ARGS['retries'] = 1
+DEFAULT_ARGS['retry_delay'] = timedelta(minutes=1)
 
 @dag(
     dag_id="five_mins_processing_pipeline",
@@ -45,6 +47,7 @@ source_connection_id = DB_CONFIG["connections"]["source"]
         "template_date": "2025-03-11 00:00:00"
     },
     tags=["incremental_ingestion"],
+    dagrun_timeout=timedelta(minutes=8),
     is_paused_upon_creation=False,
     on_failure_callback=on_failure_callback
 )

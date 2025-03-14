@@ -4,7 +4,7 @@ Can be triggered manually or by the 5-minute processing pipeline.
 """
 # Standard library imports
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, Any
 
 # Airflow imports
@@ -24,6 +24,8 @@ from utils.pipeline_utils import (
 )
 warehouse_connection_id = DB_CONFIG["connections"]["warehouse"]
 source_connection_id = DB_CONFIG["connections"]["source"]
+DEFAULT_ARGS['retries'] = 1
+DEFAULT_ARGS['retry_delay'] = timedelta(minutes=1)
 
 # Set up logger
 logger = logging.getLogger(__name__)
@@ -43,6 +45,7 @@ logger = logging.getLogger(__name__)
         "template_date": "2025-03-12 00:00:00"
     },
     tags=["incremental_ingestion"],
+    dagrun_timeout=timedelta(minutes=60),
     is_paused_upon_creation=False,
     on_failure_callback=on_failure_callback
 )
