@@ -75,7 +75,7 @@ For Tasks 1 and 2, test failures do not automatically fail the process since the
 
 Below is an example of the Great Expectations test results dashboard:
 
-![Great Expectations Test Results](images/example_great_expectation_tests.jpg)
+![Great Expectations Test Results](images/example_great_expectation_tests.png)
 
 ## Task 3: Airflow Data Pipeline
 
@@ -211,11 +211,11 @@ The `pipeline_utils.py` provides common functionality:
 
 Below is the DBT data lineage visualization showing the relationships between models:
 
-![DBT Data Lineage](images/example_data_lineage.jpg)
+![DBT Data Lineage](images/example_data_lineage.png)
 
 And an example of the DBT documentation interface for exploring model details:
 
-![DBT Documentation](images/example_dbt_docs.jpg)
+![DBT Documentation](images/example_dbt_docs.png)
 
 ### Handling Late-Arriving Data
 
