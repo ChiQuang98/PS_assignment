@@ -143,7 +143,7 @@ The `five_mins_processing_pipeline.py` DAG:
 - Extracts new purchase data from the source
 - Loads it into the bronze layer
 - Transforms and validates data in the silver layer
-- Checks data freshness in the hourly table (Bronze layer). If data is stale, the pipeline will trigger the `hourly_processing_pipeline` without waiting for confirmation (to prevent blocking the next schedule)
+- Checks data freshness in the hourly table (Bronze layer). If data is stale, the pipeline will trigger the `hourly_processing_pipeline` without waiting for confirmation (to prevent blocking the next schedule) but if hourly data is up to date, Pipeline will not trigger hourly_processing_pipeline to save resource.
 - If the `five_mins_processing_pipeline` is triggered with full-refresh mode, the `hourly_processing_pipeline` will also be triggered with full refresh mode to ensure data alignment
 
 Key features:
@@ -205,31 +205,104 @@ The `pipeline_utils.py` provides common functionality:
   - Provides hourly and daily metrics per user and country
   - Includes calculations like total revenue, average revenue per purchase, etc.
 
-### Data Quality Framework
+### Handling Late-Arriving Data
 
-Data validation happens at multiple levels:
+The solution handles late-arriving data through a carefully designed incremental processing strategy:
 
-1. **Bronze layer validation** (DBT models):
-   - Mostly focuses on data freshness
-   - Not null checks
-   - Column type validation
+1. **Lookback Windows**: Each incremental model includes a lookback window to reprocess data that might arrive late:
+   - For 5-minute models (purchases):
+     ```sql
+     {% if is_incremental() %}
+         WHERE timestamp >= (SELECT MAX(timestamp) FROM {{ this }}) - INTERVAL '10 minutes'
+     {% endif %}
+     ```
+     This allows reprocessing of data up to 10 minutes old, ensuring that any records delayed by up to 10 minutes are still properly captured.
 
-2. **Silver layer validation** (DBT models):
-   - Column-level tests (not_null, unique, data types)
-   - Relationship tests between tables
-   - Value validation (e.g., revenue must be positive)
-   - Freshness checks to ensure data is current
+   - For hourly models (spins):
+     ```sql
+     {% if is_incremental() %}
+         WHERE timestamp >= (SELECT MAX(timestamp) FROM {{ this }}) - INTERVAL '2 hours'
+     {% endif %}
+     ```
+     This provides a 2-hour window to capture hourly data that might be delayed.
 
-3. **Gold layer validation** (DBT models):
-   - Business rule validation
-   - Cross-table consistency checks
-   - Aggregation integrity tests
-   - Statistical distribution checks
+2. **Deduplication Strategy**: All silver layer models implement deduplication logic using window functions:
+   ```sql
+   row_number() over (partition by transaction_id order by updated_at desc) as rn
+   ```
+   This ensures that if the same record arrives multiple times (potentially with updates), only the most recent version is kept.
 
-When validation fails:
-- Critical issues stop the pipeline and alert via Slack
-- Warnings are logged for review but allow the pipeline to continue
-- All issues are documented in logs and DBT test results
+3. **Full Refresh Option**: For cases where data arrives extremely late (beyond the lookback windows), both pipelines support full refresh mode, which can be triggered manually with a specific time range through the Airflow UI.
+
+4. **Cross-Pipeline Triggering**: The 5-minute pipeline monitors the freshness of hourly data and automatically triggers the hourly pipeline if staleness is detected, ensuring that all aggregations remain up-to-date.
+
+### Ensuring Data Consistency
+
+Data consistency is maintained through a comprehensive set of tests implemented at each layer:
+
+1. **Type Consistency Tests**:
+   ```yaml
+   - dbt_expectations.expect_column_values_to_be_of_type:
+       column_type: timestamp
+   ```
+   Ensures all data types are correct and consistent across tables.
+
+2. **Referential Integrity Tests**:
+   ```yaml
+   - relationships:
+       to: "{{ ref('silver_spins_hourly') }}"
+       field: user_id
+   ```
+   Verifies that foreign keys reference valid primary keys in related tables.
+
+3. **Cardinality Tests**:
+   ```yaml
+   - dbt_utils.cardinality_equality:
+       field: user_id
+       to: ref('silver_spins_hourly')
+   ```
+   Checks that the number of distinct values in related columns matches expectations.
+
+4. **Uniqueness Tests**:
+   ```yaml
+   - dbt_utils.unique_combination_of_columns:
+       combination_of_columns:
+         - transaction_id
+   ```
+   Ensures key columns or combinations have no duplicates.
+
+5. **Value Validation Tests**:
+   ```yaml
+   - dbt_expectations.expect_column_values_to_be_between:
+       min_value: 0.0
+       strictly: true
+   ```
+   Validates that values fall within acceptable ranges.
+
+6. **Temporal Consistency Tests**:
+   ```yaml
+   - dbt_utils.expression_is_true:
+       expression: "updated_at >= created_at"
+   ```
+   Verifies that timestamps maintain logical ordering.
+
+7. **Column Ordering Tests**:
+   ```yaml
+   - dbt_expectations.expect_table_columns_to_match_ordered_list:
+       column_list: [timestamp, transaction_id, user_id, revenue, extracted_at, updated_at, created_at]
+   ```
+   Ensures column structure remains consistent.
+
+8. **Data Freshness Tests**:
+   ```yaml
+   - dbt_expectations.expect_row_values_to_have_recent_data:
+       column_name: timestamp
+       datepart: minute
+       interval: 10
+   ```
+   Alerts when data becomes stale.
+
+These tests run as part of the DBT models execution and fail the pipeline if critical consistency issues are detected, preventing inconsistent data from propagating through the layers.
 
 ### Usage
 
@@ -277,6 +350,7 @@ To process historical data:
 #### Running DBT Models Manually
 
 ```bash
+pip install dbt-postgres
 cd pipelines/dbt/playstudio_project
 dbt build --target local
 ```
