@@ -81,7 +81,7 @@ Below is an example of the Great Expectations test results dashboard:
 
 ### Architecture
 
-![Architecture Diagram](docs/architecture_diagram.png)
+![Architecture Diagram](images/architecture.png)
 
 The project consists of:
 
@@ -441,22 +441,11 @@ playstudio-data-pipeline/
 │   ├── example_dbt_docs.jpg                 # DBT documentation for data models
 │   └── example_great_expectation_tests.jpg  # Great Expectations test results for Task 1 & 2
 │
-├── docs/                         # Documentation files
-│   └── architecture_diagram.png  # System architecture diagram
 │
 └── .env                          # Environment variables
 ```
+## Video Demo: https://jam.dev/c/f930c5e7-876d-4584-8256-b8be1bb3162e 
 
-## Contributing
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Commit your changes: `git commit -m 'Add feature'`
-4. Push to the branch: `git push origin feature-name`
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 
