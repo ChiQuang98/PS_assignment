@@ -75,7 +75,7 @@ For Tasks 1 and 2, test failures do not automatically fail the process since the
 
 Below is an example of the Great Expectations test results dashboard:
 
-![Great Expectations Test Results](images/example_great_expectation_tests.png)
+![Great Expectations Test Results](images/example_great_expectation_tests_for_task1_2.png)
 
 ## Task 3: Airflow Data Pipeline
 
