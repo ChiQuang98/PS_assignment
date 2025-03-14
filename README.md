@@ -73,6 +73,10 @@ For Tasks 1 and 2, test failures do not automatically fail the process since the
 4. When tests fail, inspect the data issues and modify the source data or processing logic as needed
 5. Re-run the script until all validation tests pass
 
+Below is an example of the Great Expectations test results dashboard:
+
+![Great Expectations Test Results](images/example_great_expectation_tests.jpg)
+
 ## Task 3: Airflow Data Pipeline
 
 ### Architecture
@@ -204,6 +208,14 @@ The `pipeline_utils.py` provides common functionality:
   - Combines purchases and spins data
   - Provides hourly and daily metrics per user and country
   - Includes calculations like total revenue, average revenue per purchase, etc.
+
+Below is the DBT data lineage visualization showing the relationships between models:
+
+![DBT Data Lineage](images/example_data_lineage.jpg)
+
+And an example of the DBT documentation interface for exploring model details:
+
+![DBT Documentation](images/example_dbt_docs.jpg)
 
 ### Handling Late-Arriving Data
 
@@ -424,7 +436,10 @@ playstudio-data-pipeline/
 │   └── requirements.txt          # Python dependencies
 │
 ├── images/                       # Screenshots and instructional images
-│   └── trigger_backfill_manually.jpg  # UI guidance for triggering backfills
+│   ├── trigger_backfill_manually.jpg        # UI guidance for triggering backfills
+│   ├── example_data_lineage.jpg             # DBT data lineage visualization
+│   ├── example_dbt_docs.jpg                 # DBT documentation for data models
+│   └── example_great_expectation_tests.jpg  # Great Expectations test results for Task 1 & 2
 │
 ├── docs/                         # Documentation files
 │   └── architecture_diagram.png  # System architecture diagram
