@@ -1,0 +1,18 @@
+[2025-03-11T14:50:02.125+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.prepare_dag_execution scheduled__2025-03-11T14:45:00+00:00 [queued]>
+[2025-03-11T14:50:02.129+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.prepare_dag_execution scheduled__2025-03-11T14:45:00+00:00 [queued]>
+[2025-03-11T14:50:02.129+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-11T14:50:02.136+0000] {taskinstance.py:1382} INFO - Executing <Task(PythonOperator): prepare_dag_execution> on 2025-03-11 14:45:00+00:00
+[2025-03-11T14:50:02.139+0000] {standard_task_runner.py:57} INFO - Started process 17188 to run task
+[2025-03-11T14:50:02.141+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'ingest_bronze_layer_dag', 'prepare_dag_execution', 'scheduled__2025-03-11T14:45:00+00:00', '--job-id', '470', '--raw', '--subdir', 'DAGS_FOLDER/ingesting_pipeline.py', '--cfg-path', '/tmp/tmpuupn9mc2']
+[2025-03-11T14:50:02.143+0000] {standard_task_runner.py:85} INFO - Job 470: Subtask prepare_dag_execution
+[2025-03-11T14:50:02.168+0000] {task_command.py:416} INFO - Running <TaskInstance: ingest_bronze_layer_dag.prepare_dag_execution scheduled__2025-03-11T14:45:00+00:00 [running]> on host 41ccd9d1769c
+[2025-03-11T14:50:02.397+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='ingest_bronze_layer_dag' AIRFLOW_CTX_TASK_ID='prepare_dag_execution' AIRFLOW_CTX_EXECUTION_DATE='2025-03-11T14:45:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-03-11T14:45:00+00:00'
+[2025-03-11T14:50:02.408+0000] {base.py:73} INFO - Using connection ID 'postgres_warehouse_db' for task execution.
+[2025-03-11T14:50:02.412+0000] {warnings.py:109} WARNING - /opt/***/dags/ingesting_pipeline.py:136: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  df = pd.read_sql(query, conn)
+
+[2025-03-11T14:50:02.425+0000] {logging_mixin.py:154} INFO - No running instances found for task_id: extract_and_load_purchases
+[2025-03-11T14:50:02.426+0000] {python.py:194} INFO - Done. Returned value was: {'next_task': 'extract_and_load_purchases', 'transform_task': 'transform_silver_incremental'}
+[2025-03-11T14:50:02.434+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=ingest_bronze_layer_dag, task_id=prepare_dag_execution, execution_date=20250311T144500, start_date=20250311T145002, end_date=20250311T145002
+[2025-03-11T14:50:02.449+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2025-03-11T14:50:02.553+0000] {taskinstance.py:2778} INFO - 1 downstream tasks scheduled from follow-on schedule check

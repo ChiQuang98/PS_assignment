@@ -1,0 +1,12 @@
+[2025-03-13T17:20:27.030+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: five_mins_processing_pipeline.trigger_hourly_pipeline scheduled__2025-03-13T17:15:00+00:00 [queued]>
+[2025-03-13T17:20:27.034+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: five_mins_processing_pipeline.trigger_hourly_pipeline scheduled__2025-03-13T17:15:00+00:00 [queued]>
+[2025-03-13T17:20:27.035+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-13T17:20:27.041+0000] {taskinstance.py:1382} INFO - Executing <Task(TriggerDagRunOperator): trigger_hourly_pipeline> on 2025-03-13 17:15:00+00:00
+[2025-03-13T17:20:27.044+0000] {standard_task_runner.py:57} INFO - Started process 77164 to run task
+[2025-03-13T17:20:27.047+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'five_mins_processing_pipeline', 'trigger_hourly_pipeline', 'scheduled__2025-03-13T17:15:00+00:00', '--job-id', '3654', '--raw', '--subdir', 'DAGS_FOLDER/five_mins_processing_pipeline.py', '--cfg-path', '/tmp/tmpz_gcm3cx']
+[2025-03-13T17:20:27.049+0000] {standard_task_runner.py:85} INFO - Job 3654: Subtask trigger_hourly_pipeline
+[2025-03-13T17:20:27.075+0000] {task_command.py:416} INFO - Running <TaskInstance: five_mins_processing_pipeline.trigger_hourly_pipeline scheduled__2025-03-13T17:15:00+00:00 [running]> on host c8e526380ef3
+[2025-03-13T17:20:28.371+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='five_mins_processing_pipeline' AIRFLOW_CTX_TASK_ID='trigger_hourly_pipeline' AIRFLOW_CTX_EXECUTION_DATE='2025-03-13T17:15:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-03-13T17:15:00+00:00'
+[2025-03-13T17:20:28.453+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=five_mins_processing_pipeline, task_id=trigger_hourly_pipeline, execution_date=20250313T171500, start_date=20250313T172027, end_date=20250313T172028
+[2025-03-13T17:20:28.505+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2025-03-13T17:20:28.542+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check

@@ -1,0 +1,54 @@
+[2025-03-11T08:53:54.191+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.get_task_instance_info manual__2025-03-11T08:53:49+00:00 [queued]>
+[2025-03-11T08:53:54.195+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.get_task_instance_info manual__2025-03-11T08:53:49+00:00 [queued]>
+[2025-03-11T08:53:54.196+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-11T08:53:54.204+0000] {taskinstance.py:1382} INFO - Executing <Task(_PythonDecoratedOperator): get_task_instance_info> on 2025-03-11 08:53:49+00:00
+[2025-03-11T08:53:54.209+0000] {standard_task_runner.py:57} INFO - Started process 6710 to run task
+[2025-03-11T08:53:54.212+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'ingest_bronze_layer_dag', 'get_task_instance_info', 'manual__2025-03-11T08:53:49+00:00', '--job-id', '166', '--raw', '--subdir', 'DAGS_FOLDER/ingesting_pipeline.py', '--cfg-path', '/tmp/tmp0jgnt16i']
+[2025-03-11T08:53:54.215+0000] {standard_task_runner.py:85} INFO - Job 166: Subtask get_task_instance_info
+[2025-03-11T08:53:54.246+0000] {task_command.py:416} INFO - Running <TaskInstance: ingest_bronze_layer_dag.get_task_instance_info manual__2025-03-11T08:53:49+00:00 [running]> on host 41ccd9d1769c
+[2025-03-11T08:53:54.470+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='ingest_bronze_layer_dag' AIRFLOW_CTX_TASK_ID='get_task_instance_info' AIRFLOW_CTX_EXECUTION_DATE='2025-03-11T08:53:49+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-11T08:53:49+00:00'
+[2025-03-11T08:53:54.471+0000] {taskinstance.py:1937} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/decorators/base.py", line 221, in execute
+    return_value = super().execute(context)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 192, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 209, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/ingesting_pipeline.py", line 93, in task_a_function
+    running_dag_run_info = get_running_dag_runs(dag_id, current_execution_date)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/session.py", line 79, in wrapper
+    return func(*args, session=session, **kwargs)
+  File "/opt/airflow/dags/ingesting_pipeline.py", line 77, in get_running_dag_runs
+    (DagRun.dag_id == ti_alias.dag_id) & (DagRun.execution_date == ti_alias.execution_date)
+  File "/home/airflow/.local/lib/python3.10/site-packages/sqlalchemy/sql/operators.py", line 387, in __eq__
+    return self.operate(eq, other)
+  File "/home/airflow/.local/lib/python3.10/site-packages/sqlalchemy/orm/attributes.py", line 322, in operate
+    return op(self.comparator, *other, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/sqlalchemy/sql/operators.py", line 387, in __eq__
+    return self.operate(eq, other)
+  File "/home/airflow/.local/lib/python3.10/site-packages/sqlalchemy/orm/properties.py", line 426, in operate
+    return op(self.__clause_element__(), *other, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/sqlalchemy/sql/annotation.py", line 225, in __eq__
+    return self.__element.__class__.__eq__(self, other)
+  File "/home/airflow/.local/lib/python3.10/site-packages/sqlalchemy/sql/operators.py", line 387, in __eq__
+    return self.operate(eq, other)
+  File "/home/airflow/.local/lib/python3.10/site-packages/sqlalchemy/sql/elements.py", line 873, in operate
+    return op(self.comparator, *other, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/sqlalchemy/sql/operators.py", line 387, in __eq__
+    return self.operate(eq, other)
+  File "/home/airflow/.local/lib/python3.10/site-packages/sqlalchemy/sql/type_api.py", line 1379, in operate
+    return super(TypeDecorator.Comparator, self).operate(
+  File "/home/airflow/.local/lib/python3.10/site-packages/sqlalchemy/sql/type_api.py", line 77, in operate
+    return o[0](self.expr, op, *(other + o[1:]), **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/sqlalchemy/sql/default_comparator.py", line 101, in _boolean_compare
+    obj = coercions.expect(
+  File "/home/airflow/.local/lib/python3.10/site-packages/sqlalchemy/sql/coercions.py", line 177, in expect
+    element = element.__clause_element__()
+  File "/home/airflow/.local/lib/python3.10/site-packages/sqlalchemy/ext/associationproxy.py", line 441, in __clause_element__
+    raise NotImplementedError(
+NotImplementedError: The association proxy can't be used as a plain column expression; it only works inside of a comparison expression
+[2025-03-11T08:53:54.476+0000] {taskinstance.py:1400} INFO - Marking task as FAILED. dag_id=ingest_bronze_layer_dag, task_id=get_task_instance_info, execution_date=20250311T085349, start_date=20250311T085354, end_date=20250311T085354
+[2025-03-11T08:53:54.481+0000] {standard_task_runner.py:104} ERROR - Failed to execute job 166 for task get_task_instance_info (The association proxy can't be used as a plain column expression; it only works inside of a comparison expression; 6710)
+[2025-03-11T08:53:54.517+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 1
+[2025-03-11T08:53:54.528+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check

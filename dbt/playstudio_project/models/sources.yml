@@ -1,0 +1,54 @@
+version: 2
+
+sources:
+  - name: bronze_layer_source
+    schema: bronze_layer
+    database: "{{ 'warehouse_db' if target.name == 'prod' else 'warehouse_db' }}"
+    tables:
+      - name: bronze_purchases
+        description: Raw purchase data ingested from source systems, expected to be updated every 5 mins
+        columns:
+          - name: transaction_id
+            description: Unique identifier for each purchase transaction
+            tests:
+              - not_null
+          - name: timestamp
+            description: Time when the purchase was made
+            tests:
+              - not_null
+          - name: user_id
+            description: User identifier
+            tests:
+              - not_null
+          - name: revenue
+            description: Purchase amount in 'revenue=X' format
+        loaded_at_field: timestamp
+        freshness:
+          warn_after: {count: 10, period: minute}
+          error_after: {count: 30, period: minute}
+      - name: bronze_spins_hourly
+        description: raw spins data from source data this table is updated every hour
+        columns:
+          - name: timestamp
+            description: Time when the spins were made
+            tests:
+              - not_null
+          - name: user_id
+            description: User identifier
+            tests:
+              - not_null
+          - name: country
+            description: Country of the user
+    
+          - name: total_spins
+            description: Number of spins made
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: float
+                  severity: warn
+        loaded_at_field: timestamp
+        freshness:
+          warn_after: {count: 1, period: hour}
+          error_after: {count: 3, period: hour}
+ 

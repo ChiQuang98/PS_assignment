@@ -1,0 +1,19 @@
+[2025-03-11T10:35:08.865+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.extract_and_load_purchases scheduled__2025-03-11T10:30:00+00:00 [queued]>
+[2025-03-11T10:35:08.869+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.extract_and_load_purchases scheduled__2025-03-11T10:30:00+00:00 [queued]>
+[2025-03-11T10:35:08.869+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-11T10:35:08.878+0000] {taskinstance.py:1382} INFO - Executing <Task(_PythonDecoratedOperator): extract_and_load_purchases> on 2025-03-11 10:30:00+00:00
+[2025-03-11T10:35:08.880+0000] {standard_task_runner.py:57} INFO - Started process 10883 to run task
+[2025-03-11T10:35:08.881+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'ingest_bronze_layer_dag', 'extract_and_load_purchases', 'scheduled__2025-03-11T10:30:00+00:00', '--job-id', '276', '--raw', '--subdir', 'DAGS_FOLDER/ingesting_pipeline.py', '--cfg-path', '/tmp/tmp8tdj4o16']
+[2025-03-11T10:35:08.883+0000] {standard_task_runner.py:85} INFO - Job 276: Subtask extract_and_load_purchases
+[2025-03-11T10:35:08.976+0000] {task_command.py:416} INFO - Running <TaskInstance: ingest_bronze_layer_dag.extract_and_load_purchases scheduled__2025-03-11T10:30:00+00:00 [running]> on host 41ccd9d1769c
+[2025-03-11T10:35:09.003+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='ingest_bronze_layer_dag' AIRFLOW_CTX_TASK_ID='extract_and_load_purchases' AIRFLOW_CTX_EXECUTION_DATE='2025-03-11T10:30:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-03-11T10:30:00+00:00'
+[2025-03-11T10:35:14.034+0000] {base.py:73} INFO - Using connection ID 'postgres_source_db' for task execution.
+[2025-03-11T10:35:14.039+0000] {warnings.py:109} WARNING - /opt/***/dags/ingesting_pipeline.py:130: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  df = pd.read_sql(query, conn)
+
+[2025-03-11T10:35:14.043+0000] {logging_mixin.py:154} INFO - Retrieved 0 rows of data
+[2025-03-11T10:35:14.043+0000] {logging_mixin.py:154} INFO - No data to insert into bronze_layer.bronze_purchases
+[2025-03-11T10:35:14.043+0000] {python.py:194} INFO - Done. Returned value was: Inserted 0 rows into bronze_layer.bronze_purchases
+[2025-03-11T10:35:14.053+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=ingest_bronze_layer_dag, task_id=extract_and_load_purchases, execution_date=20250311T103000, start_date=20250311T103508, end_date=20250311T103514
+[2025-03-11T10:35:14.071+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2025-03-11T10:35:14.080+0000] {taskinstance.py:2778} INFO - 1 downstream tasks scheduled from follow-on schedule check

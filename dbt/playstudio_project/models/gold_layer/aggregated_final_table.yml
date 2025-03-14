@@ -1,0 +1,141 @@
+version: 2
+
+models:
+  - name: aggregated_final_table
+    description: |
+      Gold layer model that aggregates key business metrics from purchases and spins data.
+      This table provides a unified view of user activity and revenue generation, 
+      enabling analysis of user behavior and monetization patterns.
+    config:
+      tags: ['gold_layer', 'business_metrics', 'reporting']
+      materialized: incremental
+
+
+    columns:
+
+      - name: app_hour
+        description: Timestamp from upstream tables, granularity is hourly
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: timestamp
+              severity: warn
+              
+      - name: user_id
+        description: Unique identifier for the user
+        tests:
+          - not_null
+          - relationships:
+              to: ref('silver_spins_hourly')
+              field: user_id
+              severity: warn
+          - relationships:
+              to: ref('silver_purchases')
+              field: user_id
+              severity: warn
+            
+              
+      - name: country
+        description: Country code where the user was located
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['CA', 'US']
+              severity: warn
+
+      - name: total_spins_hourly
+        description: Total number of spins for the user in the time period
+        data_type: int
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              strictly: true
+
+      - name: amount_purchases_hourly
+        description: amount of purchases made by the user in the time period
+        data_type: int
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              strictly: true
+              
+      - name: total_revenue_hourly
+        description: Total revenue in hourly granularity
+        data_type: float
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              strictly: true
+
+      - name: avg_revenue_per_purchase_hourly
+        description: Average revenue per purchase for the user
+        data_type: float
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              strictly: true
+              severity: warn
+
+      - name: total_revenue_per_user_daily
+        description: Total revenue per user in daily granularity
+        data_type: float
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              strictly: true
+
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+          
+      # Business logic validations
+      - dbt_utils.expression_is_true:
+          expression: "total_revenue_hourly >= 0"
+          name: revenue_non_negative
+          
+      - dbt_utils.expression_is_true:
+          expression: "amount_purchases_hourly = 0 OR avg_revenue_per_purchase_hourly > 0"
+          name: valid_avg_revenue_calculation
+          
+      - dbt_utils.expression_is_true:
+          expression: "amount_purchases_hourly = 0 OR total_revenue_hourly > 0"
+          name: purchases_generate_revenue
+          severity: error
+          
+      - dbt_utils.expression_is_true:
+          expression: "total_revenue_per_user_daily >= total_revenue_hourly"
+          name: daily_revenue_consistency
+          severity: error
+
+      # Data freshness tests
+      - dbt_expectations.expect_row_values_to_have_recent_data:
+          column_name: app_hour
+          severity: error
+          datepart: hour
+          interval: 2
+          name: data_freshness_hourly
+          
+          
+      # Relationship checks between metrics
+      - dbt_expectations.expect_column_pair_values_to_be_in_set:
+          column_A: amount_purchases_hourly
+          column_B: total_revenue_hourly
+          value_pairs_set:
+            - [0, 0]  # If no purchases, revenue should be 0
+          severity: warn
+          row_condition: amount_purchases_hourly = 0 OR total_revenue_hourly = 0
+          name: zero_purchases_zero_revenue
+
+          
+      # Data integrity across aggregation levels
+      # - dbt_utils.expression_is_true:
+      #     expression: "total_daily_revenue > 0 OR (total_daily_revenue = 0 AND total_revenue = a0)"
+      #     name: daily_aggregation_consistency
+      #     severity: warn
+          
+
+          
+
+

@@ -1,0 +1,18 @@
+[2025-03-12T06:06:36.508+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: process_bronze_and_silver_layer.branch_hourly_pipeline scheduled__2025-03-12T06:00:00+00:00 [queued]>
+[2025-03-12T06:06:36.511+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: process_bronze_and_silver_layer.branch_hourly_pipeline scheduled__2025-03-12T06:00:00+00:00 [queued]>
+[2025-03-12T06:06:36.511+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-12T06:06:36.588+0000] {taskinstance.py:1382} INFO - Executing <Task(BranchPythonOperator): branch_hourly_pipeline> on 2025-03-12 06:00:00+00:00
+[2025-03-12T06:06:36.590+0000] {standard_task_runner.py:57} INFO - Started process 15585 to run task
+[2025-03-12T06:06:36.592+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'process_bronze_and_silver_layer', 'branch_hourly_pipeline', 'scheduled__2025-03-12T06:00:00+00:00', '--job-id', '1245', '--raw', '--subdir', 'DAGS_FOLDER/5mins_processing_pipeline.py', '--cfg-path', '/tmp/tmpzqlraflw']
+[2025-03-12T06:06:36.594+0000] {standard_task_runner.py:85} INFO - Job 1245: Subtask branch_hourly_pipeline
+[2025-03-12T06:06:36.613+0000] {task_command.py:416} INFO - Running <TaskInstance: process_bronze_and_silver_layer.branch_hourly_pipeline scheduled__2025-03-12T06:00:00+00:00 [running]> on host c8e526380ef3
+[2025-03-12T06:06:36.642+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='process_bronze_and_silver_layer' AIRFLOW_CTX_TASK_ID='branch_hourly_pipeline' AIRFLOW_CTX_EXECUTION_DATE='2025-03-12T06:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-03-12T06:00:00+00:00'
+[2025-03-12T06:06:36.656+0000] {5mins_processing_pipeline.py:186} INFO - Found 0 running instances of DAG hourly_processing_pipeline
+[2025-03-12T06:06:36.656+0000] {5mins_processing_pipeline.py:411} INFO - Hourly data needs refresh and DAG is not running - triggering hourly pipeline
+[2025-03-12T06:06:36.656+0000] {python.py:194} INFO - Done. Returned value was: trigger_hourly_pipeline
+[2025-03-12T06:06:36.656+0000] {python.py:227} INFO - Branch callable return trigger_hourly_pipeline
+[2025-03-12T06:06:36.656+0000] {skipmixin.py:173} INFO - Following branch trigger_hourly_pipeline
+[2025-03-12T06:06:36.661+0000] {skipmixin.py:239} INFO - Skipping tasks []
+[2025-03-12T06:06:36.673+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=process_bronze_and_silver_layer, task_id=branch_hourly_pipeline, execution_date=20250312T060000, start_date=20250312T060636, end_date=20250312T060636
+[2025-03-12T06:06:36.694+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2025-03-12T06:06:36.707+0000] {taskinstance.py:2778} INFO - 1 downstream tasks scheduled from follow-on schedule check

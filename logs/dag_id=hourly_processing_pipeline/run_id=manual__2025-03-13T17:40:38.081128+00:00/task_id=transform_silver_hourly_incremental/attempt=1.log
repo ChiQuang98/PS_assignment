@@ -1,0 +1,46 @@
+[2025-03-13T17:40:54.179+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: hourly_processing_pipeline.transform_silver_hourly_incremental manual__2025-03-13T17:40:38.081128+00:00 [queued]>
+[2025-03-13T17:40:54.186+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: hourly_processing_pipeline.transform_silver_hourly_incremental manual__2025-03-13T17:40:38.081128+00:00 [queued]>
+[2025-03-13T17:40:54.186+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-13T17:40:54.205+0000] {taskinstance.py:1382} INFO - Executing <Task(BashOperator): transform_silver_hourly_incremental> on 2025-03-13 17:40:38.081128+00:00
+[2025-03-13T17:40:54.210+0000] {standard_task_runner.py:57} INFO - Started process 78218 to run task
+[2025-03-13T17:40:54.213+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'hourly_processing_pipeline', 'transform_silver_hourly_incremental', 'manual__2025-03-13T17:40:38.081128+00:00', '--job-id', '3715', '--raw', '--subdir', 'DAGS_FOLDER/hourly_processing_pipeline.py', '--cfg-path', '/tmp/tmpyktwcu63']
+[2025-03-13T17:40:54.216+0000] {standard_task_runner.py:85} INFO - Job 3715: Subtask transform_silver_hourly_incremental
+[2025-03-13T17:40:54.247+0000] {task_command.py:416} INFO - Running <TaskInstance: hourly_processing_pipeline.transform_silver_hourly_incremental manual__2025-03-13T17:40:38.081128+00:00 [running]> on host c8e526380ef3
+[2025-03-13T17:40:54.283+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='hourly_processing_pipeline' AIRFLOW_CTX_TASK_ID='transform_silver_hourly_incremental' AIRFLOW_CTX_EXECUTION_DATE='2025-03-13T17:40:38.081128+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-13T17:40:38.081128+00:00'
+[2025-03-13T17:40:54.284+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2025-03-13T17:40:54.284+0000] {subprocess.py:75} INFO - Running command: ['/bin/bash', '-c', 'cd /opt/***/dbt/playstudio_project && export WAREHOUSE_HOST=None && export WAREHOUSE_PASSWORD=None && export WAREHOUSE_USER=None && dbt deps && dbt run --select tag:silver_hourly_incremental --target prod']
+[2025-03-13T17:40:54.290+0000] {subprocess.py:86} INFO - Output:
+[2025-03-13T17:40:56.015+0000] {subprocess.py:93} INFO - [0m17:40:56  Running with dbt=1.7.18
+[2025-03-13T17:41:00.781+0000] {subprocess.py:93} INFO - [0m17:41:00  Installing dbt-labs/dbt_utils
+[2025-03-13T17:41:03.220+0000] {subprocess.py:93} INFO - [0m17:41:03  Installed from version 1.1.1
+[2025-03-13T17:41:03.221+0000] {subprocess.py:93} INFO - [0m17:41:03  Updated version available: 1.3.0
+[2025-03-13T17:41:03.221+0000] {subprocess.py:93} INFO - [0m17:41:03  Installing metaplane/dbt_expectations
+[2025-03-13T17:41:19.000+0000] {subprocess.py:93} INFO - [0m17:41:18  Installed from version 0.10.8
+[2025-03-13T17:41:19.015+0000] {subprocess.py:93} INFO - [0m17:41:18  Up to date!
+[2025-03-13T17:41:19.015+0000] {subprocess.py:93} INFO - [0m17:41:19  Installing godatadriven/dbt_date
+[2025-03-13T17:41:19.563+0000] {subprocess.py:93} INFO - [0m17:41:19  Installed from version 0.11.0
+[2025-03-13T17:41:19.564+0000] {subprocess.py:93} INFO - [0m17:41:19  Up to date!
+[2025-03-13T17:41:19.564+0000] {subprocess.py:93} INFO - [0m17:41:19
+[2025-03-13T17:41:19.564+0000] {subprocess.py:93} INFO - [0m17:41:19  Updates available for packages: ['dbt-labs/dbt_utils']
+[2025-03-13T17:41:19.565+0000] {subprocess.py:93} INFO - Update your versions in packages.yml, then run dbt deps
+[2025-03-14T02:57:03.758+0000] {subprocess.py:93} INFO - [0m02:57:03  Running with dbt=1.7.18
+[2025-03-14T02:57:04.400+0000] {subprocess.py:93} INFO - [0m02:57:04  Registered adapter: postgres=1.7.18
+[2025-03-14T02:57:04.658+0000] {subprocess.py:93} INFO - [0m02:57:04  [[33mWARNING[0m]: Configuration paths exist in your dbt_project.yml file which do not apply to any resources.
+[2025-03-14T02:57:04.658+0000] {subprocess.py:93} INFO - There are 1 unused configuration paths:
+[2025-03-14T02:57:04.658+0000] {subprocess.py:93} INFO - - models.playstudio_project.bronze_layer
+[2025-03-14T02:57:04.690+0000] {subprocess.py:93} INFO - [0m02:57:04  Found 67 tests, 3 models, 2 sources, 0 exposures, 0 metrics, 783 macros, 0 groups, 0 semantic models
+[2025-03-14T02:57:04.693+0000] {subprocess.py:93} INFO - [0m02:57:04
+[2025-03-14T02:57:07.112+0000] {subprocess.py:93} INFO - [0m02:57:07  Concurrency: 1 threads (target='prod')
+[2025-03-14T02:57:07.123+0000] {subprocess.py:93} INFO - [0m02:57:07
+[2025-03-14T02:57:07.148+0000] {subprocess.py:93} INFO - [0m02:57:07  1 of 1 START sql incremental model silver_layer.silver_spins_hourly ............ [RUN]
+[2025-03-14T02:57:07.569+0000] {subprocess.py:93} INFO - [0m02:57:07  1 of 1 OK created sql incremental model silver_layer.silver_spins_hourly ....... [[32mINSERT 0 2[0m in 0.42s]
+[2025-03-14T02:57:07.588+0000] {subprocess.py:93} INFO - [0m02:57:07
+[2025-03-14T02:57:07.588+0000] {subprocess.py:93} INFO - [0m02:57:07  Finished running 1 incremental model in 0 hours 0 minutes and 2.89 seconds (2.89s).
+[2025-03-14T02:57:07.610+0000] {subprocess.py:93} INFO - [0m02:57:07
+[2025-03-14T02:57:07.613+0000] {subprocess.py:93} INFO - [0m02:57:07  [32mCompleted successfully[0m
+[2025-03-14T02:57:07.613+0000] {subprocess.py:93} INFO - [0m02:57:07
+[2025-03-14T02:57:07.615+0000] {subprocess.py:93} INFO - [0m02:57:07  Done. PASS=1 WARN=0 ERROR=0 SKIP=0 TOTAL=1
+[2025-03-14T02:57:10.796+0000] {subprocess.py:97} INFO - Command exited with return code 0
+[2025-03-14T02:57:10.910+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=hourly_processing_pipeline, task_id=transform_silver_hourly_incremental, execution_date=20250313T174038, start_date=20250313T174054, end_date=20250314T025710
+[2025-03-14T02:57:10.962+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2025-03-14T02:57:11.068+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check

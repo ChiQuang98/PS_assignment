@@ -1,0 +1,23 @@
+[2025-03-12T08:15:09.621+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: process_bronze_and_silver_layer.check_hourly_data_freshness scheduled__2025-03-12T08:10:00+00:00 [queued]>
+[2025-03-12T08:15:09.624+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: process_bronze_and_silver_layer.check_hourly_data_freshness scheduled__2025-03-12T08:10:00+00:00 [queued]>
+[2025-03-12T08:15:09.624+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-12T08:15:09.702+0000] {taskinstance.py:1382} INFO - Executing <Task(_PythonDecoratedOperator): check_hourly_data_freshness> on 2025-03-12 08:10:00+00:00
+[2025-03-12T08:15:09.705+0000] {standard_task_runner.py:57} INFO - Started process 22906 to run task
+[2025-03-12T08:15:09.706+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'process_bronze_and_silver_layer', 'check_hourly_data_freshness', 'scheduled__2025-03-12T08:10:00+00:00', '--job-id', '1904', '--raw', '--subdir', 'DAGS_FOLDER/5mins_processing_pipeline.py', '--cfg-path', '/tmp/tmp41y5bwd4']
+[2025-03-12T08:15:09.708+0000] {standard_task_runner.py:85} INFO - Job 1904: Subtask check_hourly_data_freshness
+[2025-03-12T08:15:09.729+0000] {task_command.py:416} INFO - Running <TaskInstance: process_bronze_and_silver_layer.check_hourly_data_freshness scheduled__2025-03-12T08:10:00+00:00 [running]> on host c8e526380ef3
+[2025-03-12T08:15:09.763+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='process_bronze_and_silver_layer' AIRFLOW_CTX_TASK_ID='check_hourly_data_freshness' AIRFLOW_CTX_EXECUTION_DATE='2025-03-12T08:10:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-03-12T08:10:00+00:00'
+[2025-03-12T08:15:09.767+0000] {5mins_processing_pipeline.py:425} INFO - 5 mins pipeline is in: Incremental mode
+[2025-03-12T08:15:09.767+0000] {5mins_processing_pipeline.py:148} INFO - Getting latest updated_at from bronze_layer.bronze_spins_hourly
+[2025-03-12T08:15:09.767+0000] {5mins_processing_pipeline.py:115} INFO - Executing query: SELECT MAX(updated_at) FROM bronze_layer.bronze_spins_hourly
+[2025-03-12T08:15:09.770+0000] {base.py:73} INFO - Using connection ID 'postgres_warehouse_db' for task execution.
+[2025-03-12T08:15:09.773+0000] {warnings.py:109} WARNING - /opt/***/dags/5mins_processing_pipeline.py:119: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  df = pd.read_sql(query, conn)
+
+[2025-03-12T08:15:09.775+0000] {5mins_processing_pipeline.py:120} INFO - Query executed successfully. Retrieved 1 rows.
+[2025-03-12T08:15:09.775+0000] {5mins_processing_pipeline.py:156} INFO - Latest updated_at: 2025-03-11 17:53:01.567076
+[2025-03-12T08:15:09.776+0000] {5mins_processing_pipeline.py:484} INFO - Hourly data is stale. Latest update: 2025-03-11 17:53:01.567076, Threshold: 2025-03-12 07:15:09.775956
+[2025-03-12T08:15:09.776+0000] {python.py:194} INFO - Done. Returned value was: {'needs_hourly_refresh': True, 'is_full_refresh': False, '5mins_is_full_refresh': False, '5mins_start_date': None, '5mins_end_date': None, 'latest_update': '2025-03-11 17:53:01.567076'}
+[2025-03-12T08:15:09.811+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=process_bronze_and_silver_layer, task_id=check_hourly_data_freshness, execution_date=20250312T081000, start_date=20250312T081509, end_date=20250312T081509
+[2025-03-12T08:15:09.852+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2025-03-12T08:15:09.868+0000] {taskinstance.py:2778} INFO - 1 downstream tasks scheduled from follow-on schedule check

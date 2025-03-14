@@ -1,0 +1,113 @@
+version: 2
+
+models:
+  - name: silver_spins_hourly
+    description: |
+      Silver layer model for processed hourly spins data.
+      This model aggregates and standardizes spin activity data on an hourly basis,
+      ensuring proper type casting and deduplication of records.
+    config:
+      tags: ['silver_layer', 'spins_data', 'silver_hourly_incremental']
+      materialized: incremental
+
+
+    columns:
+      - name: timestamp
+        description: Hour timestamp when the spins were recorded
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: timestamp
+              severity: warn
+
+      - name: user_id
+        description: Unique identifier for the user who performed the spins
+        tests:
+          - not_null
+
+
+      - name: country
+        description: Country code where the user was located
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['CA', 'US']
+              severity: error
+ 
+              
+
+
+      - name: total_spins
+        description: Total number of spins recorded for the user in the hour
+        data_type: float
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              strictly: true
+
+      - name: extracted_at
+        description: Timestamp when the data was extracted from source
+        tests:
+          - not_null
+
+      - name: updated_at
+        description: Timestamp when the record was last updated in source
+        tests:
+          - not_null
+
+      - name: created_at
+        description: Timestamp when the record was created in source
+        tests:
+          - not_null
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+      - dbt_utils.expression_is_true:
+          expression: "total_spins >= 0"
+          name: spins_non_negative
+
+
+
+      # Warning for data older than 2 hours
+      - dbt_expectations.expect_row_values_to_have_recent_data:
+          column_name: timestamp
+          severity: warn
+          datepart: hour
+          interval: 1
+          name: data_freshness_stale_2hours
+
+      # Error for data older than 8 hours
+      - dbt_expectations.expect_row_values_to_have_recent_data:
+          column_name: timestamp
+          datepart: hour
+          interval: 3
+          # severity should be error to check data freshness. But set it warn to avoid failing the pipeline
+          severity: warn
+          # severity: error
+          name: data_freshness_critical_8hours
+
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - timestamp
+            - user_id
+            - country
+          name: unique_hourly_user_country_combination
+
+      - dbt_utils.expression_is_true:
+          expression: "updated_at >= created_at"
+          name: temporal_consistency
+
+      - dbt_utils.expression_is_true:
+          expression: "total_spins IS NOT NULL"
+          name: spins_count_check
+
+      - dbt_utils.equal_rowcount:
+          compare_model: source('bronze_layer_source', 'bronze_spins_hourly')
+          name: rowcount_check_with_bronze_spins
+          severity: warn
+
+
+

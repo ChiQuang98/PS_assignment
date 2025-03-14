@@ -1,0 +1,33 @@
+[2025-03-12T14:25:41.646+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: hourly_processing_pipeline.transform_silver_hourly_incremental manual__2025-03-12T14:25:23.609041+00:00 [queued]>
+[2025-03-12T14:25:41.651+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: hourly_processing_pipeline.transform_silver_hourly_incremental manual__2025-03-12T14:25:23.609041+00:00 [queued]>
+[2025-03-12T14:25:41.652+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-12T14:25:41.788+0000] {taskinstance.py:1382} INFO - Executing <Task(BashOperator): transform_silver_hourly_incremental> on 2025-03-12 14:25:23.609041+00:00
+[2025-03-12T14:25:41.791+0000] {standard_task_runner.py:57} INFO - Started process 36383 to run task
+[2025-03-12T14:25:41.794+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'hourly_processing_pipeline', 'transform_silver_hourly_incremental', 'manual__2025-03-12T14:25:23.609041+00:00', '--job-id', '2786', '--raw', '--subdir', 'DAGS_FOLDER/hourly_processing_pipeline.py', '--cfg-path', '/tmp/tmpkbjqbj6e']
+[2025-03-12T14:25:41.796+0000] {standard_task_runner.py:85} INFO - Job 2786: Subtask transform_silver_hourly_incremental
+[2025-03-12T14:25:41.828+0000] {task_command.py:416} INFO - Running <TaskInstance: hourly_processing_pipeline.transform_silver_hourly_incremental manual__2025-03-12T14:25:23.609041+00:00 [running]> on host c8e526380ef3
+[2025-03-12T14:25:41.878+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='hourly_processing_pipeline' AIRFLOW_CTX_TASK_ID='transform_silver_hourly_incremental' AIRFLOW_CTX_EXECUTION_DATE='2025-03-12T14:25:23.609041+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-12T14:25:23.609041+00:00'
+[2025-03-12T14:25:41.879+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2025-03-12T14:25:41.879+0000] {subprocess.py:75} INFO - Running command: ['/bin/bash', '-c', 'cd /opt/***/dbt/playstudio_project && export WAREHOUSE_HOST=None && export WAREHOUSE_PASSWORD=None && export WAREHOUSE_USER=None && dbt run --select tag:silver_hourly_incremental --target prod']
+[2025-03-12T14:25:41.888+0000] {subprocess.py:86} INFO - Output:
+[2025-03-12T14:25:43.266+0000] {subprocess.py:93} INFO - [0m14:25:43  Running with dbt=1.7.18
+[2025-03-12T14:25:43.380+0000] {subprocess.py:93} INFO - [0m14:25:43  Registered adapter: postgres=1.7.18
+[2025-03-12T14:25:43.401+0000] {subprocess.py:93} INFO - [0m14:25:43  [[33mWARNING[0m]: Configuration paths exist in your dbt_project.yml file which do not apply to any resources.
+[2025-03-12T14:25:43.401+0000] {subprocess.py:93} INFO - There are 1 unused configuration paths:
+[2025-03-12T14:25:43.401+0000] {subprocess.py:93} INFO - - models.playstudio_project.bronze_layer
+[2025-03-12T14:25:43.411+0000] {subprocess.py:93} INFO - [0m14:25:43  Found 3 models, 2 sources, 0 exposures, 0 metrics, 402 macros, 0 groups, 0 semantic models
+[2025-03-12T14:25:43.413+0000] {subprocess.py:93} INFO - [0m14:25:43
+[2025-03-12T14:25:43.478+0000] {subprocess.py:93} INFO - [0m14:25:43  Concurrency: 1 threads (target='prod')
+[2025-03-12T14:25:43.478+0000] {subprocess.py:93} INFO - [0m14:25:43
+[2025-03-12T14:25:43.508+0000] {subprocess.py:93} INFO - [0m14:25:43  1 of 1 START sql incremental model silver_layer.silver_spins_hourly ............ [RUN]
+[2025-03-12T14:25:43.963+0000] {subprocess.py:93} INFO - [0m14:25:43  1 of 1 OK created sql incremental model silver_layer.silver_spins_hourly ....... [[32mINSERT 0 42[0m in 0.45s]
+[2025-03-12T14:25:43.992+0000] {subprocess.py:93} INFO - [0m14:25:43
+[2025-03-12T14:25:43.992+0000] {subprocess.py:93} INFO - [0m14:25:43  Finished running 1 incremental model in 0 hours 0 minutes and 0.58 seconds (0.58s).
+[2025-03-12T14:25:44.002+0000] {subprocess.py:93} INFO - [0m14:25:44
+[2025-03-12T14:25:44.004+0000] {subprocess.py:93} INFO - [0m14:25:44  [32mCompleted successfully[0m
+[2025-03-12T14:25:44.004+0000] {subprocess.py:93} INFO - [0m14:25:44
+[2025-03-12T14:25:44.004+0000] {subprocess.py:93} INFO - [0m14:25:44  Done. PASS=1 WARN=0 ERROR=0 SKIP=0 TOTAL=1
+[2025-03-12T14:25:45.468+0000] {subprocess.py:97} INFO - Command exited with return code 0
+[2025-03-12T14:25:45.521+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=hourly_processing_pipeline, task_id=transform_silver_hourly_incremental, execution_date=20250312T142523, start_date=20250312T142541, end_date=20250312T142545
+[2025-03-12T14:25:45.547+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2025-03-12T14:25:45.586+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check

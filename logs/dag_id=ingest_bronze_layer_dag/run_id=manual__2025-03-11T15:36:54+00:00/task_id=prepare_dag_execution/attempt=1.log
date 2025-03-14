@@ -1,0 +1,27 @@
+[2025-03-11T15:36:57.347+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.prepare_dag_execution manual__2025-03-11T15:36:54+00:00 [queued]>
+[2025-03-11T15:36:57.351+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.prepare_dag_execution manual__2025-03-11T15:36:54+00:00 [queued]>
+[2025-03-11T15:36:57.351+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-11T15:36:57.358+0000] {taskinstance.py:1382} INFO - Executing <Task(PythonOperator): prepare_dag_execution> on 2025-03-11 15:36:54+00:00
+[2025-03-11T15:36:57.367+0000] {standard_task_runner.py:57} INFO - Started process 19123 to run task
+[2025-03-11T15:36:57.376+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'ingest_bronze_layer_dag', 'prepare_dag_execution', 'manual__2025-03-11T15:36:54+00:00', '--job-id', '531', '--raw', '--subdir', 'DAGS_FOLDER/ingesting_pipeline.py', '--cfg-path', '/tmp/tmpeb2uif1f']
+[2025-03-11T15:36:57.379+0000] {standard_task_runner.py:85} INFO - Job 531: Subtask prepare_dag_execution
+[2025-03-11T15:36:57.406+0000] {task_command.py:416} INFO - Running <TaskInstance: ingest_bronze_layer_dag.prepare_dag_execution manual__2025-03-11T15:36:54+00:00 [running]> on host 41ccd9d1769c
+[2025-03-11T15:36:57.698+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='ingest_bronze_layer_dag' AIRFLOW_CTX_TASK_ID='prepare_dag_execution' AIRFLOW_CTX_EXECUTION_DATE='2025-03-11T15:36:54+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-11T15:36:54+00:00'
+[2025-03-11T15:36:57.698+0000] {ingesting_pipeline.py:249} INFO - Starting DAG run: manual__2025-03-11T15:36:54+00:00
+[2025-03-11T15:36:57.699+0000] {ingesting_pipeline.py:250} INFO - Parameters: {'is_full_refresh': False, 'backfill_start_date': None, 'backfill_end_date': None, 'template_date': '2025-03-11 00:00:00'}
+[2025-03-11T15:36:57.699+0000] {ingesting_pipeline.py:254} INFO - Refresh mode: Incremental
+[2025-03-11T15:36:57.705+0000] {ingesting_pipeline.py:167} INFO - Getting latest updated_at from bronze_layer.bronze_purchases
+[2025-03-11T15:36:57.705+0000] {ingesting_pipeline.py:140} INFO - Executing query: SELECT MAX(updated_at) FROM bronze_layer.bronze_purchases
+[2025-03-11T15:36:57.708+0000] {base.py:73} INFO - Using connection ID 'postgres_warehouse_db' for task execution.
+[2025-03-11T15:36:57.712+0000] {warnings.py:109} WARNING - /opt/***/dags/ingesting_pipeline.py:143: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  df = pd.read_sql(query, conn)
+
+[2025-03-11T15:36:57.714+0000] {ingesting_pipeline.py:144} INFO - Query executed successfully. Retrieved 1 rows.
+[2025-03-11T15:36:57.714+0000] {ingesting_pipeline.py:175} INFO - Latest updated_at: 2025-03-11 05:11:10
+[2025-03-11T15:36:57.720+0000] {ingesting_pipeline.py:283} INFO - Incremental mode - using timestamp: 2025-03-11 05:11:10
+[2025-03-11T15:36:57.724+0000] {ingesting_pipeline.py:125} INFO - No running instances found for task_id: extract_and_load_purchases
+[2025-03-11T15:36:57.724+0000] {ingesting_pipeline.py:329} INFO - Execution plan: {'next_task': 'extract_and_load_purchases', 'transform_task': 'transform_silver_incremental'}
+[2025-03-11T15:36:57.724+0000] {python.py:194} INFO - Done. Returned value was: {'next_task': 'extract_and_load_purchases', 'transform_task': 'transform_silver_incremental'}
+[2025-03-11T15:36:57.733+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=ingest_bronze_layer_dag, task_id=prepare_dag_execution, execution_date=20250311T153654, start_date=20250311T153657, end_date=20250311T153657
+[2025-03-11T15:36:57.783+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2025-03-11T15:36:57.963+0000] {taskinstance.py:2778} INFO - 1 downstream tasks scheduled from follow-on schedule check

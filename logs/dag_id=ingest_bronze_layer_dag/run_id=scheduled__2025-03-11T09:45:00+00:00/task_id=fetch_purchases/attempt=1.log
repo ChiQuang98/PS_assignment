@@ -1,0 +1,25 @@
+[2025-03-11T09:50:00.605+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.fetch_purchases scheduled__2025-03-11T09:45:00+00:00 [queued]>
+[2025-03-11T09:50:00.609+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.fetch_purchases scheduled__2025-03-11T09:45:00+00:00 [queued]>
+[2025-03-11T09:50:00.609+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-11T09:50:00.615+0000] {taskinstance.py:1382} INFO - Executing <Task(_PythonDecoratedOperator): fetch_purchases> on 2025-03-11 09:45:00+00:00
+[2025-03-11T09:50:00.617+0000] {standard_task_runner.py:57} INFO - Started process 8909 to run task
+[2025-03-11T09:50:00.619+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'ingest_bronze_layer_dag', 'fetch_purchases', 'scheduled__2025-03-11T09:45:00+00:00', '--job-id', '194', '--raw', '--subdir', 'DAGS_FOLDER/ingesting_pipeline.py', '--cfg-path', '/tmp/tmpjjz3i_k1']
+[2025-03-11T09:50:00.621+0000] {standard_task_runner.py:85} INFO - Job 194: Subtask fetch_purchases
+[2025-03-11T09:50:00.640+0000] {task_command.py:416} INFO - Running <TaskInstance: ingest_bronze_layer_dag.fetch_purchases scheduled__2025-03-11T09:45:00+00:00 [running]> on host 41ccd9d1769c
+[2025-03-11T09:50:00.838+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='ingest_bronze_layer_dag' AIRFLOW_CTX_TASK_ID='fetch_purchases' AIRFLOW_CTX_EXECUTION_DATE='2025-03-11T09:45:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-03-11T09:45:00+00:00'
+[2025-03-11T09:50:00.843+0000] {base.py:73} INFO - Using connection ID 'postgres_source_db' for task execution.
+[2025-03-11T09:50:00.849+0000] {taskinstance.py:1937} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/decorators/base.py", line 221, in execute
+    return_value = super().execute(context)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 192, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 209, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/ingesting_pipeline.py", line 152, in fetch_purchases
+    ti.xcom_push(key="incremental_time_processing", value=incremental_time)
+NameError: name 'ti' is not defined
+[2025-03-11T09:50:00.852+0000] {taskinstance.py:1400} INFO - Marking task as FAILED. dag_id=ingest_bronze_layer_dag, task_id=fetch_purchases, execution_date=20250311T094500, start_date=20250311T095000, end_date=20250311T095000
+[2025-03-11T09:50:00.859+0000] {standard_task_runner.py:104} ERROR - Failed to execute job 194 for task fetch_purchases (name 'ti' is not defined; 8909)
+[2025-03-11T09:50:00.896+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 1
+[2025-03-11T09:50:00.903+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check

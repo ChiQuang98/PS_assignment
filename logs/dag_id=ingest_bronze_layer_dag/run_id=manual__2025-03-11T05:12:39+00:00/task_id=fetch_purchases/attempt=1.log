@@ -1,0 +1,88 @@
+[2025-03-11T05:12:41.954+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.fetch_purchases manual__2025-03-11T05:12:39+00:00 [queued]>
+[2025-03-11T05:12:41.958+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.fetch_purchases manual__2025-03-11T05:12:39+00:00 [queued]>
+[2025-03-11T05:12:41.958+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-11T05:12:41.964+0000] {taskinstance.py:1382} INFO - Executing <Task(_PythonDecoratedOperator): fetch_purchases> on 2025-03-11 05:12:39+00:00
+[2025-03-11T05:12:41.966+0000] {standard_task_runner.py:57} INFO - Started process 5997 to run task
+[2025-03-11T05:12:41.968+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'ingest_bronze_layer_dag', 'fetch_purchases', 'manual__2025-03-11T05:12:39+00:00', '--job-id', '44', '--raw', '--subdir', 'DAGS_FOLDER/ingesting_pipeline.py', '--cfg-path', '/tmp/tmp90ggnyu8']
+[2025-03-11T05:12:41.970+0000] {standard_task_runner.py:85} INFO - Job 44: Subtask fetch_purchases
+[2025-03-11T05:12:41.992+0000] {task_command.py:416} INFO - Running <TaskInstance: ingest_bronze_layer_dag.fetch_purchases manual__2025-03-11T05:12:39+00:00 [running]> on host 50aa08a06197
+[2025-03-11T05:12:42.127+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='ingest_bronze_layer_dag' AIRFLOW_CTX_TASK_ID='fetch_purchases' AIRFLOW_CTX_EXECUTION_DATE='2025-03-11T05:12:39+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-11T05:12:39+00:00'
+[2025-03-11T05:12:42.131+0000] {base.py:73} INFO - Using connection ID 'postgres_source_db' for task execution.
+[2025-03-11T05:12:42.134+0000] {logging_mixin.py:154} INFO - Incremental time: 1900-01-01 00:00:00
+[2025-03-11T05:12:42.136+0000] {warnings.py:109} WARNING - /opt/***/dags/ingesting_pipeline.py:58: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  df = pd.read_sql(query, conn)
+
+[2025-03-11T05:12:42.144+0000] {logging_mixin.py:154} INFO - DataFrame:             timestamp  ...                     extracted_at
+0 2022-04-01 22:53:05  ... 2025-03-11 05:12:42.137153+00:00
+1 2022-04-01 22:53:05  ... 2025-03-11 05:12:42.137153+00:00
+2 2022-04-01 19:03:22  ... 2025-03-11 05:12:42.137153+00:00
+3 2022-04-03 17:17:38  ... 2025-03-11 05:12:42.137153+00:00
+4 2022-04-02 11:53:15  ... 2025-03-11 05:12:42.137153+00:00
+
+[5 rows x 7 columns]
+[2025-03-11T05:12:42.144+0000] {warnings.py:109} WARNING - /opt/***/dags/ingesting_pipeline.py:62: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  df.to_sql(BRONZE_TABLE_PURCHASES, conn, if_exists="append", index=False)
+
+[2025-03-11T05:12:42.145+0000] {taskinstance.py:1937} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 2262, in execute
+    cur.execute(sql, *args)
+psycopg2.errors.UndefinedTable: relation "sqlite_master" does not exist
+LINE 5:             sqlite_master
+                    ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/decorators/base.py", line 221, in execute
+    return_value = super().execute(context)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 192, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 209, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/ingesting_pipeline.py", line 62, in fetch_purchases
+    df.to_sql(BRONZE_TABLE_PURCHASES, conn, if_exists="append", index=False)
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/util/_decorators.py", line 333, in wrapper
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/core/generic.py", line 3008, in to_sql
+    return sql.to_sql(
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 788, in to_sql
+    return pandas_sql.to_sql(
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 2438, in to_sql
+    table.create()
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 925, in create
+    if self.exists():
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 911, in exists
+    return self.pd_sql.has_table(self.name, self.schema)
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 2453, in has_table
+    return len(self.execute(query, [name]).fetchall()) > 0
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 2274, in execute
+    raise ex from exc
+pandas.errors.DatabaseError: Execution failed on sql '
+        SELECT
+            name
+        FROM
+            sqlite_master
+        WHERE
+            type IN ('table', 'view')
+            AND name=?;
+        ': relation "sqlite_master" does not exist
+LINE 5:             sqlite_master
+                    ^
+
+[2025-03-11T05:12:42.149+0000] {taskinstance.py:1400} INFO - Marking task as FAILED. dag_id=ingest_bronze_layer_dag, task_id=fetch_purchases, execution_date=20250311T051239, start_date=20250311T051241, end_date=20250311T051242
+[2025-03-11T05:12:42.155+0000] {standard_task_runner.py:104} ERROR - Failed to execute job 44 for task fetch_purchases (Execution failed on sql '
+        SELECT
+            name
+        FROM
+            sqlite_master
+        WHERE
+            type IN ('table', 'view')
+            AND name=?;
+        ': relation "sqlite_master" does not exist
+LINE 5:             sqlite_master
+                    ^
+; 5997)
+[2025-03-11T05:12:42.167+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 1
+[2025-03-11T05:12:42.174+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check

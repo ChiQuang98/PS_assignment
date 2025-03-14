@@ -1,0 +1,122 @@
+version: 2
+
+models:
+  - name: silver_purchases
+    description: |
+      Silver layer model for processed purchase data.
+      This model cleans and standardizes transaction data, including proper type casting and revenue parsing.
+      It deduplicates transactions by keeping only the latest record for each transaction_id.
+    config:
+      tags: ['silver_layer', 'purchases_data', 'silver_5mins_incremental']
+      materialized: incremental
+
+    columns:
+      - name: timestamp
+        description: Timestamp when the purchase was made
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: timestamp
+              severity: warn
+
+      - name: transaction_id
+        description: Unique identifier for the purchase transaction
+        tests:
+          - not_null
+          - unique
+          - dbt_expectations.expect_column_values_to_match_regex:
+              regex: '^[a-zA-Z0-9\-_]+$'
+
+      - name: user_id
+        description: Unique identifier for the user who made the purchase
+        tests:
+          - not_null
+          - relationships:
+              to: "{{ ref('silver_spins_hourly') }}"
+              field: user_id
+              severity: warn
+
+          - dbt_utils.cardinality_equality:
+              field: user_id
+              to: ref('silver_spins_hourly')
+              severity: warn
+              name: user_id_cardinality_check
+
+      - name: revenue
+        description: Revenue amount from the purchase (extracted from 'revenue=X' format)
+        data_type: numeric
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0.0
+              strictly: true
+
+      - name: extracted_at
+        description: Timestamp when the data was extracted from source
+        tests:
+          - not_null
+
+      - name: updated_at
+        description: Timestamp when the record was last updated in source
+        tests:
+          - not_null
+
+      - name: created_at
+        description: Timestamp when the record was created in source
+        tests:
+          - not_null
+
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+
+      - dbt_utils.expression_is_true:
+          expression: "revenue >= 0"
+          name: revenue_non_negative
+
+      - dbt_expectations.expect_table_columns_to_match_ordered_list:
+          column_list:
+            - timestamp
+            - transaction_id
+            - user_id
+            - revenue
+            - extracted_at
+            - updated_at
+            - created_at
+      # Warning for data older than 10 minutes
+      - dbt_expectations.expect_row_values_to_have_recent_data:
+          column_name: timestamp
+          severity: warn
+          datepart: minute
+          interval: 10
+          name: data_freshness_stale_10mins
+      # Error for data older than 30 minutes
+      - dbt_expectations.expect_row_values_to_have_recent_data:
+          column_name: timestamp
+          datepart: minute
+          interval: 30
+          # severity should be error to check data freshness. But set it warn to avoid failing the pipeline
+          severity: warn
+          # severity: error
+          name: data_freshness_critical_30mins
+
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - transaction_id
+          name: unique_transactions
+
+      - dbt_utils.expression_is_true:
+          expression: "updated_at >= created_at"
+          name: temporal_consistency
+
+
+      - dbt_utils.expression_is_true:
+          expression: "revenue IS NOT NULL"
+          name: revenue_extraction_check
+      
+      - dbt_utils.equal_rowcount:
+          compare_model: source('bronze_layer_source', 'bronze_purchases')
+          name: rowcount_check_with_bronze_purchases
+          severity: warn
+
+

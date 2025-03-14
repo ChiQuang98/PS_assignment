@@ -1,0 +1,27 @@
+[2025-03-13T15:25:41.610+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: hourly_processing_pipeline.transform_silver_hourly_incremental manual__2025-03-13T15:25:25.895868+00:00 [queued]>
+[2025-03-13T15:25:41.614+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: hourly_processing_pipeline.transform_silver_hourly_incremental manual__2025-03-13T15:25:25.895868+00:00 [queued]>
+[2025-03-13T15:25:41.614+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-13T15:25:41.930+0000] {taskinstance.py:1382} INFO - Executing <Task(BashOperator): transform_silver_hourly_incremental> on 2025-03-13 15:25:25.895868+00:00
+[2025-03-13T15:25:41.959+0000] {standard_task_runner.py:57} INFO - Started process 72383 to run task
+[2025-03-13T15:25:41.961+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'hourly_processing_pipeline', 'transform_silver_hourly_incremental', 'manual__2025-03-13T15:25:25.895868+00:00', '--job-id', '3547', '--raw', '--subdir', 'DAGS_FOLDER/hourly_processing_pipeline.py', '--cfg-path', '/tmp/tmp8gwdk7d3']
+[2025-03-13T15:25:41.964+0000] {standard_task_runner.py:85} INFO - Job 3547: Subtask transform_silver_hourly_incremental
+[2025-03-13T15:25:42.075+0000] {task_command.py:416} INFO - Running <TaskInstance: hourly_processing_pipeline.transform_silver_hourly_incremental manual__2025-03-13T15:25:25.895868+00:00 [running]> on host c8e526380ef3
+[2025-03-13T15:25:42.275+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='hourly_processing_pipeline' AIRFLOW_CTX_TASK_ID='transform_silver_hourly_incremental' AIRFLOW_CTX_EXECUTION_DATE='2025-03-13T15:25:25.895868+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-13T15:25:25.895868+00:00'
+[2025-03-13T15:25:42.279+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2025-03-13T15:25:42.279+0000] {subprocess.py:75} INFO - Running command: ['/bin/bash', '-c', 'cd /opt/***/dbt/playstudio_project && export WAREHOUSE_HOST=None && export WAREHOUSE_PASSWORD=None && export WAREHOUSE_USER=None && dbt run --select tag:silver_hourly_incremental --target prod']
+[2025-03-13T15:25:42.307+0000] {subprocess.py:86} INFO - Output:
+[2025-03-13T15:25:43.977+0000] {subprocess.py:93} INFO - [0m15:25:43  Running with dbt=1.7.18
+[2025-03-13T15:25:44.094+0000] {subprocess.py:93} INFO - [0m15:25:44  Registered adapter: postgres=1.7.18
+[2025-03-13T15:25:44.380+0000] {subprocess.py:93} INFO - [0m15:25:44  Encountered an error:
+[2025-03-13T15:25:44.380+0000] {subprocess.py:93} INFO - Compilation Error in test dbt_utils_equality_silver_purchases_source_bronze_layer_source_bronze_purchases___third_column (models/silver_layer/silver_purchases.yml)
+[2025-03-13T15:25:44.380+0000] {subprocess.py:93} INFO -   macro 'dbt_macro__test_equality' takes no keyword argument 'exclude_columns'
+[2025-03-13T15:25:45.746+0000] {subprocess.py:97} INFO - Command exited with return code 2
+[2025-03-13T15:25:45.769+0000] {taskinstance.py:1937} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/bash.py", line 210, in execute
+    raise AirflowException(
+airflow.exceptions.AirflowException: Bash command failed. The command returned a non-zero exit code 2.
+[2025-03-13T15:25:45.780+0000] {taskinstance.py:1400} INFO - Marking task as FAILED. dag_id=hourly_processing_pipeline, task_id=transform_silver_hourly_incremental, execution_date=20250313T152525, start_date=20250313T152541, end_date=20250313T152545
+[2025-03-13T15:25:45.797+0000] {standard_task_runner.py:104} ERROR - Failed to execute job 3547 for task transform_silver_hourly_incremental (Bash command failed. The command returned a non-zero exit code 2.; 72383)
+[2025-03-13T15:25:45.823+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 1
+[2025-03-13T15:25:45.859+0000] {taskinstance.py:2778} INFO - 1 downstream tasks scheduled from follow-on schedule check

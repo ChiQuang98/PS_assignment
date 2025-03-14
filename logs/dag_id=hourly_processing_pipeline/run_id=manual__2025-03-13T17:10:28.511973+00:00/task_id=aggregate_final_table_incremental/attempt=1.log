@@ -1,0 +1,46 @@
+[2025-03-13T17:10:51.826+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: hourly_processing_pipeline.aggregate_final_table_incremental manual__2025-03-13T17:10:28.511973+00:00 [queued]>
+[2025-03-13T17:10:51.830+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: hourly_processing_pipeline.aggregate_final_table_incremental manual__2025-03-13T17:10:28.511973+00:00 [queued]>
+[2025-03-13T17:10:51.830+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-13T17:10:51.840+0000] {taskinstance.py:1382} INFO - Executing <Task(BashOperator): aggregate_final_table_incremental> on 2025-03-13 17:10:28.511973+00:00
+[2025-03-13T17:10:51.842+0000] {standard_task_runner.py:57} INFO - Started process 76703 to run task
+[2025-03-13T17:10:51.845+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'hourly_processing_pipeline', 'aggregate_final_table_incremental', 'manual__2025-03-13T17:10:28.511973+00:00', '--job-id', '3632', '--raw', '--subdir', 'DAGS_FOLDER/hourly_processing_pipeline.py', '--cfg-path', '/tmp/tmp4jct7h39']
+[2025-03-13T17:10:51.846+0000] {standard_task_runner.py:85} INFO - Job 3632: Subtask aggregate_final_table_incremental
+[2025-03-13T17:10:51.871+0000] {task_command.py:416} INFO - Running <TaskInstance: hourly_processing_pipeline.aggregate_final_table_incremental manual__2025-03-13T17:10:28.511973+00:00 [running]> on host c8e526380ef3
+[2025-03-13T17:10:51.910+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='hourly_processing_pipeline' AIRFLOW_CTX_TASK_ID='aggregate_final_table_incremental' AIRFLOW_CTX_EXECUTION_DATE='2025-03-13T17:10:28.511973+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-13T17:10:28.511973+00:00'
+[2025-03-13T17:10:51.912+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2025-03-13T17:10:51.912+0000] {subprocess.py:75} INFO - Running command: ['/bin/bash', '-c', 'cd /opt/***/dbt/playstudio_project && export WAREHOUSE_HOST=None && export WAREHOUSE_PASSWORD=None && export WAREHOUSE_USER=None && dbt deps && dbt run --select tag:gold_layer --target prod']
+[2025-03-13T17:10:51.919+0000] {subprocess.py:86} INFO - Output:
+[2025-03-13T17:10:53.334+0000] {subprocess.py:93} INFO - [0m17:10:53  Running with dbt=1.7.18
+[2025-03-13T17:10:54.065+0000] {subprocess.py:93} INFO - [0m17:10:54  Installing dbt-labs/dbt_utils
+[2025-03-13T17:10:54.725+0000] {subprocess.py:93} INFO - [0m17:10:54  Installed from version 1.1.1
+[2025-03-13T17:10:54.726+0000] {subprocess.py:93} INFO - [0m17:10:54  Updated version available: 1.3.0
+[2025-03-13T17:10:54.728+0000] {subprocess.py:93} INFO - [0m17:10:54  Installing metaplane/dbt_expectations
+[2025-03-13T17:10:55.934+0000] {subprocess.py:93} INFO - [0m17:10:55  Installed from version 0.10.8
+[2025-03-13T17:10:55.935+0000] {subprocess.py:93} INFO - [0m17:10:55  Up to date!
+[2025-03-13T17:10:55.935+0000] {subprocess.py:93} INFO - [0m17:10:55  Installing godatadriven/dbt_date
+[2025-03-13T17:10:56.487+0000] {subprocess.py:93} INFO - [0m17:10:56  Installed from version 0.11.0
+[2025-03-13T17:10:56.491+0000] {subprocess.py:93} INFO - [0m17:10:56  Up to date!
+[2025-03-13T17:10:56.491+0000] {subprocess.py:93} INFO - [0m17:10:56
+[2025-03-13T17:10:56.491+0000] {subprocess.py:93} INFO - [0m17:10:56  Updates available for packages: ['dbt-labs/dbt_utils']
+[2025-03-13T17:10:56.492+0000] {subprocess.py:93} INFO - Update your versions in packages.yml, then run dbt deps
+[2025-03-13T17:10:59.133+0000] {subprocess.py:93} INFO - [0m17:10:59  Running with dbt=1.7.18
+[2025-03-13T17:10:59.257+0000] {subprocess.py:93} INFO - [0m17:10:59  Registered adapter: postgres=1.7.18
+[2025-03-13T17:10:59.335+0000] {subprocess.py:93} INFO - [0m17:10:59  [[33mWARNING[0m]: Configuration paths exist in your dbt_project.yml file which do not apply to any resources.
+[2025-03-13T17:10:59.335+0000] {subprocess.py:93} INFO - There are 1 unused configuration paths:
+[2025-03-13T17:10:59.335+0000] {subprocess.py:93} INFO - - models.playstudio_project.bronze_layer
+[2025-03-13T17:10:59.356+0000] {subprocess.py:93} INFO - [0m17:10:59  Found 67 tests, 3 models, 2 sources, 0 exposures, 0 metrics, 783 macros, 0 groups, 0 semantic models
+[2025-03-13T17:10:59.358+0000] {subprocess.py:93} INFO - [0m17:10:59
+[2025-03-13T17:10:59.401+0000] {subprocess.py:93} INFO - [0m17:10:59  Concurrency: 1 threads (target='prod')
+[2025-03-13T17:10:59.402+0000] {subprocess.py:93} INFO - [0m17:10:59
+[2025-03-13T17:10:59.406+0000] {subprocess.py:93} INFO - [0m17:10:59  1 of 1 START sql incremental model gold_layer.aggregated_final_table ........... [RUN]
+[2025-03-13T17:10:59.500+0000] {subprocess.py:93} INFO - [0m17:10:59  1 of 1 OK created sql incremental model gold_layer.aggregated_final_table ...... [[32mINSERT 0 1[0m in 0.09s]
+[2025-03-13T17:10:59.508+0000] {subprocess.py:93} INFO - [0m17:10:59
+[2025-03-13T17:10:59.508+0000] {subprocess.py:93} INFO - [0m17:10:59  Finished running 1 incremental model in 0 hours 0 minutes and 0.15 seconds (0.15s).
+[2025-03-13T17:10:59.519+0000] {subprocess.py:93} INFO - [0m17:10:59
+[2025-03-13T17:10:59.519+0000] {subprocess.py:93} INFO - [0m17:10:59  [32mCompleted successfully[0m
+[2025-03-13T17:10:59.519+0000] {subprocess.py:93} INFO - [0m17:10:59
+[2025-03-13T17:10:59.520+0000] {subprocess.py:93} INFO - [0m17:10:59  Done. PASS=1 WARN=0 ERROR=0 SKIP=0 TOTAL=1
+[2025-03-13T17:11:01.258+0000] {subprocess.py:97} INFO - Command exited with return code 0
+[2025-03-13T17:11:01.279+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=hourly_processing_pipeline, task_id=aggregate_final_table_incremental, execution_date=20250313T171028, start_date=20250313T171051, end_date=20250313T171101
+[2025-03-13T17:11:01.308+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2025-03-13T17:11:01.328+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check

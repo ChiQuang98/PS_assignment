@@ -1,0 +1,21 @@
+[2025-03-11T08:08:34.462+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.get_task_instance_info manual__2025-03-11T08:08:28+00:00 [queued]>
+[2025-03-11T08:08:34.466+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.get_task_instance_info manual__2025-03-11T08:08:28+00:00 [queued]>
+[2025-03-11T08:08:34.467+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-11T08:08:34.473+0000] {taskinstance.py:1382} INFO - Executing <Task(_PythonDecoratedOperator): get_task_instance_info> on 2025-03-11 08:08:28+00:00
+[2025-03-11T08:08:34.477+0000] {standard_task_runner.py:57} INFO - Started process 5112 to run task
+[2025-03-11T08:08:34.480+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'ingest_bronze_layer_dag', 'get_task_instance_info', 'manual__2025-03-11T08:08:28+00:00', '--job-id', '148', '--raw', '--subdir', 'DAGS_FOLDER/ingesting_pipeline.py', '--cfg-path', '/tmp/tmpirf1dny4']
+[2025-03-11T08:08:34.482+0000] {standard_task_runner.py:85} INFO - Job 148: Subtask get_task_instance_info
+[2025-03-11T08:08:34.518+0000] {task_command.py:416} INFO - Running <TaskInstance: ingest_bronze_layer_dag.get_task_instance_info manual__2025-03-11T08:08:28+00:00 [running]> on host 41ccd9d1769c
+[2025-03-11T08:08:34.775+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='ingest_bronze_layer_dag' AIRFLOW_CTX_TASK_ID='get_task_instance_info' AIRFLOW_CTX_EXECUTION_DATE='2025-03-11T08:08:28+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-11T08:08:28+00:00'
+[2025-03-11T08:08:34.776+0000] {warnings.py:109} WARNING - /home/***/.local/lib/python3.10/site-packages/***/utils/context.py:314: AirflowContextDeprecationWarning: Accessing 'execution_date' from the template is deprecated and will be removed in a future version. Please use 'data_interval_start' or 'logical_date' instead.
+  warnings.warn(_create_deprecation_warning(k, replacements))
+
+[2025-03-11T08:08:34.784+0000] {logging_mixin.py:154} INFO - Current task_a execution_date: 2025-03-11T08:08:28+00:00
+[2025-03-11T08:08:34.784+0000] {logging_mixin.py:154} INFO - Current task_a params: {'is_full_refresh': False, 'backfill_start_date': '2025-03-11 00:00:00', 'backfill_end_date': '2025-03-11 00:00:00', 'template_date': '2025-03-11 00:00:00'}
+[2025-03-11T08:08:34.784+0000] {logging_mixin.py:154} INFO - No other task_a instances are currently running.
+[2025-03-11T08:08:34.784+0000] {logging_mixin.py:154} INFO - Waiting for task_a to finish...
+[2025-03-11T08:10:51.348+0000] {local_task_job_runner.py:294} WARNING - State of this instance has been externally set to success. Terminating instance.
+[2025-03-11T08:10:51.373+0000] {process_utils.py:131} INFO - Sending 15 to group 5112. PIDs of all processes in the group: [5112]
+[2025-03-11T08:10:51.373+0000] {process_utils.py:86} INFO - Sending the signal 15 to group 5112
+[2025-03-11T08:10:51.375+0000] {taskinstance.py:1632} ERROR - Received SIGTERM. Terminating subprocesses.
+[2025-03-11T08:10:51.428+0000] {process_utils.py:79} INFO - Process psutil.Process(pid=5112, status='terminated', exitcode=0, started='08:08:33') (5112) terminated with exit code 0

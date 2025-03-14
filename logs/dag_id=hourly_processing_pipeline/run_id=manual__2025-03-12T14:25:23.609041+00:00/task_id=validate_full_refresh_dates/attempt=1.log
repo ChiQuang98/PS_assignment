@@ -1,0 +1,15 @@
+[2025-03-12T14:25:27.389+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: hourly_processing_pipeline.validate_full_refresh_dates manual__2025-03-12T14:25:23.609041+00:00 [queued]>
+[2025-03-12T14:25:27.393+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: hourly_processing_pipeline.validate_full_refresh_dates manual__2025-03-12T14:25:23.609041+00:00 [queued]>
+[2025-03-12T14:25:27.393+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-12T14:25:27.399+0000] {taskinstance.py:1382} INFO - Executing <Task(_PythonDecoratedOperator): validate_full_refresh_dates> on 2025-03-12 14:25:23.609041+00:00
+[2025-03-12T14:25:27.401+0000] {standard_task_runner.py:57} INFO - Started process 36364 to run task
+[2025-03-12T14:25:27.403+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'hourly_processing_pipeline', 'validate_full_refresh_dates', 'manual__2025-03-12T14:25:23.609041+00:00', '--job-id', '2782', '--raw', '--subdir', 'DAGS_FOLDER/hourly_processing_pipeline.py', '--cfg-path', '/tmp/tmpvmtwy6nn']
+[2025-03-12T14:25:27.405+0000] {standard_task_runner.py:85} INFO - Job 2782: Subtask validate_full_refresh_dates
+[2025-03-12T14:25:27.531+0000] {task_command.py:416} INFO - Running <TaskInstance: hourly_processing_pipeline.validate_full_refresh_dates manual__2025-03-12T14:25:23.609041+00:00 [running]> on host c8e526380ef3
+[2025-03-12T14:25:27.561+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='hourly_processing_pipeline' AIRFLOW_CTX_TASK_ID='validate_full_refresh_dates' AIRFLOW_CTX_EXECUTION_DATE='2025-03-12T14:25:23.609041+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-12T14:25:23.609041+00:00'
+[2025-03-12T14:25:27.568+0000] {logging_mixin.py:154} INFO - ANDREW False False False
+[2025-03-12T14:25:27.568+0000] {logging_mixin.py:154} INFO - ANDREW2 <class 'bool'> <class 'bool'> <class 'str'>
+[2025-03-12T14:25:27.568+0000] {python.py:194} INFO - Done. Returned value was: {'is_valid': True}
+[2025-03-12T14:25:27.576+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=hourly_processing_pipeline, task_id=validate_full_refresh_dates, execution_date=20250312T142523, start_date=20250312T142527, end_date=20250312T142527
+[2025-03-12T14:25:27.591+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 0
+[2025-03-12T14:25:27.681+0000] {taskinstance.py:2778} INFO - 1 downstream tasks scheduled from follow-on schedule check

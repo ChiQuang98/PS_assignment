@@ -1,0 +1,26 @@
+[2025-03-11T08:52:50.195+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.get_task_instance_info manual__2025-03-11T08:52:45+00:00 [queued]>
+[2025-03-11T08:52:50.201+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ingest_bronze_layer_dag.get_task_instance_info manual__2025-03-11T08:52:45+00:00 [queued]>
+[2025-03-11T08:52:50.202+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2025-03-11T08:52:50.210+0000] {taskinstance.py:1382} INFO - Executing <Task(_PythonDecoratedOperator): get_task_instance_info> on 2025-03-11 08:52:45+00:00
+[2025-03-11T08:52:50.216+0000] {standard_task_runner.py:57} INFO - Started process 6665 to run task
+[2025-03-11T08:52:50.222+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'ingest_bronze_layer_dag', 'get_task_instance_info', 'manual__2025-03-11T08:52:45+00:00', '--job-id', '165', '--raw', '--subdir', 'DAGS_FOLDER/ingesting_pipeline.py', '--cfg-path', '/tmp/tmpktkqbpyp']
+[2025-03-11T08:52:50.242+0000] {standard_task_runner.py:85} INFO - Job 165: Subtask get_task_instance_info
+[2025-03-11T08:52:50.316+0000] {task_command.py:416} INFO - Running <TaskInstance: ingest_bronze_layer_dag.get_task_instance_info manual__2025-03-11T08:52:45+00:00 [running]> on host 41ccd9d1769c
+[2025-03-11T08:52:50.702+0000] {taskinstance.py:1662} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Andrew Tran' AIRFLOW_CTX_DAG_ID='ingest_bronze_layer_dag' AIRFLOW_CTX_TASK_ID='get_task_instance_info' AIRFLOW_CTX_EXECUTION_DATE='2025-03-11T08:52:45+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-11T08:52:45+00:00'
+[2025-03-11T08:52:50.703+0000] {taskinstance.py:1937} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/decorators/base.py", line 221, in execute
+    return_value = super().execute(context)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 192, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 209, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/ingesting_pipeline.py", line 93, in task_a_function
+    running_dag_run_info = get_running_dag_runs(dag_id, current_execution_date)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/session.py", line 76, in wrapper
+    return func(*args, **kwargs)
+TypeError: ingest_bronze_layer_dag.<locals>.get_running_dag_runs() missing 1 required positional argument: 'current_execution_date'
+[2025-03-11T08:52:50.710+0000] {taskinstance.py:1400} INFO - Marking task as FAILED. dag_id=ingest_bronze_layer_dag, task_id=get_task_instance_info, execution_date=20250311T085245, start_date=20250311T085250, end_date=20250311T085250
+[2025-03-11T08:52:50.717+0000] {standard_task_runner.py:104} ERROR - Failed to execute job 165 for task get_task_instance_info (ingest_bronze_layer_dag.<locals>.get_running_dag_runs() missing 1 required positional argument: 'current_execution_date'; 6665)
+[2025-03-11T08:52:50.752+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 1
+[2025-03-11T08:52:50.763+0000] {taskinstance.py:2778} INFO - 0 downstream tasks scheduled from follow-on schedule check
