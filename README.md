@@ -322,7 +322,7 @@ The pipelines are scheduled to run automatically, but you can also trigger them 
 #### Running Backfills
 
 To process historical data:
-
+image.png
 1. 5-minute pipeline:
    - Go to the Airflow UI
    - Click the "Trigger DAG" button
