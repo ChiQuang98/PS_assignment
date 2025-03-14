@@ -1,287 +1,270 @@
 # PlayStudio Data Pipeline
 
+A comprehensive data processing and analysis pipeline for PlayStudio user activity data. This project processes purchase and spins data at different intervals, validates data quality, and creates aggregated views for business insights.
+
 ## Project Overview
 
-This repository contains a comprehensive data pipeline solution for processing and analyzing user activity data in PlayStudio games. The pipeline ingests data from source systems, processes it through bronze, silver, and gold layers, and makes it available for analytics and reporting.
+This project implements a data engineering solution that satisfies the following requirements:
+
+1. **Task #1**: Process raw purchases and spins data from source files into a structured table with clear column naming
+2. **Task #2**: Implement data validation tests to ensure data quality and integrity
+3. **Task #3**: Create an Airflow pipeline architecture that handles:
+   - Purchase data (updated every 5 minutes)
+   - Spins hourly data (updated hourly)
+   - Merging both data sources into a final aggregated table
+
+The solution follows a medallion architecture with bronze (raw), silver (processed), and gold (aggregated) data layers.
 
 ## Architecture
 
-The pipeline consists of:
-
-1. **Airflow DAGs** - Orchestration layer responsible for:
-   - 5-minute incremental processing of purchase data
-   - Hourly processing of spins data
-   - Triggering dependencies between pipelines
-
-2. **DBT Models** - Transformation layer organized in:
-   - Bronze Layer - Raw ingested data
-   - Silver Layer - Cleansed, typed and deduplicated data
-   - Gold Layer - Business-ready aggregated metrics
-
-3. **PostgreSQL** - Data storage across:
-   - Source database (app_source schema)
-   - Data warehouse (bronze_layer, silver_layer, gold_layer schemas)
-
 ![Architecture Diagram](docs/architecture_diagram.png)
+
+The project consists of:
+
+- **Data Sources**: Excel files with raw purchase and spins data
+- **Data Processing**:
+  - Python scripts to extract and transform data
+  - Great Expectations for data validation
+- **Data Storage**: PostgreSQL database with dedicated schemas for each data layer
+- **Orchestration**: Airflow DAGs that run at 5-minute and hourly intervals
+- **Transformation**: DBT models that implement data quality checks and business logic
 
 ## Infrastructure Setup
 
 ### Prerequisites
 
 - Docker and Docker Compose
+- Python 3.8 or higher
 - Git
-- Python 3.8+
-- PostgreSQL 13+
 
-### Step 1: Clone the Repository
+### Installation
 
-```bash
-git clone https://github.com/your-org/playstudio-pipeline.git
-cd playstudio-pipeline
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/playstudio-data-pipeline.git
+   cd playstudio-data-pipeline
+   ```
 
-### Step 2: Set Up Environment Variables
+2. Set up environment variables (or use the provided .env file):
+   ```bash
+   # Database connections
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=airflow
+   DB_PASSWORD=airflow
+   
+   # Data source configuration
+   DATA_SOURCE_PATH=scripts/data_source/MOC.xlsx
+   ```
 
-Create a `.env` file in the root directory:
+3. Build and start the infrastructure:
+   ```bash
+   cd pipelines
+   docker-compose build
+   docker-compose up -d
+   ```
 
-```
-# Database connections
-WAREHOUSE_HOST=postgres
-WAREHOUSE_USER=postgres
-WAREHOUSE_PASSWORD=yourpassword
+4. Initialize the database schemas:
+   ```bash
+   cd ..
+   python scripts/prepare_env.py
+   ```
 
-# Airflow settings
-AIRFLOW_HOME=/opt/airflow
-AIRFLOW_UID=50000
-AIRFLOW_GID=0
-
-# Application settings
-OUTPUT_PATH=FINAL_TABLE.csv
-DATA_SOURCE_PATH=data_source/MOC - Data.xlsx
-GX_PROJECT_DIR=gx_project
-GX_SUITE_NAME=aggregate_revenue_hourly_suite
-GX_CHECKPOINT_NAME=data_quality_checkpoint
-OPEN_DATA_DOCS=false
-```
-
-### Step 3: Initialize Infrastructure with Docker Compose
-
-```bash
-# Build the services
-docker-compose build
-
-# Initialize Airflow database
-docker-compose up airflow-init
-
-# Start all services
-docker-compose up -d
-```
-
-### Step 4: Create Database Schemas
-
-```bash
-# Connect to PostgreSQL and create required schemas
-docker-compose exec postgres psql -U postgres -c "
-CREATE SCHEMA IF NOT EXISTS app_source;
-CREATE SCHEMA IF NOT EXISTS bronze_layer;
-CREATE SCHEMA IF NOT EXISTS silver_layer;
-CREATE SCHEMA IF NOT EXISTS gold_layer;
-"
-```
-
-### Step 5: Initialize DBT
-
-```bash
-# Navigate to DBT project directory
-cd dbt/playstudio_project
-
-# Install DBT dependencies
-dbt deps
-
-# Test connections
-dbt debug
-
-# Run initial models (optional)
-dbt run --full-refresh
-```
+5. Access Airflow UI at http://localhost:8080 (username: airflow, password: airflow)
 
 ## Pipeline Components
 
-### 1. 5-Minute Processing Pipeline
+### 5-Minute Processing Pipeline
 
-The `process_bronze_and_silver_layer` DAG runs every 5 minutes and:
-- Extracts purchase data from source systems
-- Loads data into the bronze layer
-- Transforms data into the silver layer
-- Checks freshness of hourly data
-- Triggers the hourly pipeline when necessary
+The `five_mins_processing_pipeline.py` DAG:
+- Runs every 5 minutes
+- Extracts new purchase data from the source
+- Loads it into the bronze layer
+- Transforms and validates data in the silver layer
+- Can trigger the hourly processing pipeline when needed
 
-Key configurations:
-- Supports incremental and full refresh modes
-- Validates date ranges for backfills
-- Ensures data quality through tests
+Key features:
+- Incremental processing to handle only new data
+- Data quality checks at ingestion
+- Error handling and retry mechanisms
 
-### 2. Hourly Processing Pipeline
+### Hourly Processing Pipeline
 
-The `hourly_processing_pipeline` DAG processes hourly aggregated spin data and:
-- Extracts spins data from source systems
-- Loads data into the bronze layer
-- Transforms data into silver and gold layers
-- Creates final aggregated business metrics
+The `hourly_processing_pipeline.py` DAG:
+- Runs hourly (or when triggered by the 5-minute pipeline)
+- Processes spins hourly data into the bronze and silver layers
+- Merges purchase and spins data into the gold layer aggregated table
+- Applies business rules and calculates metrics
 
-### 3. Shared Utilities
+### Shared Utilities
 
-Located in `utils/pipeline_utils.py`, these provide common functionality:
-- Database connection management
+The `pipeline_utils.py` provides common functionality:
+- Database connection handling
 - Data extraction and loading functions
-- Date validation
+- Validation utilities
 - DBT command generation
 
 ## Data Models
 
-### Bronze Layer Models
+### Bronze Layer
+- Raw data with minimal transformations
+- Preserves the original data structure
+- Includes metadata such as extraction timestamps
 
-Raw data ingested from source systems:
-- `bronze_purchases` - Raw purchase transaction data
-- `bronze_spins_hourly` - Raw hourly spin activity data
+### Silver Layer
+- `silver_purchases`: Validated and cleaned purchase transactions
+  - Deduplication based on transaction_id
+  - Type conversions and standardization
+  - Basic validations like non-null checks
 
-### Silver Layer Models
+- `silver_spins_hourly`: Validated and cleaned hourly spins data
+  - Aggregated by hour, user, and country
+  - Type conversions and standardization
 
-Cleaned and standardized data:
-- `silver_purchases` - Deduplicated purchase data with proper types
-- `silver_spins_hourly` - Validated hourly spin data
-
-### Gold Layer Models
-
-Business-ready metrics:
-- `aggregated_final_table` - Combined metrics including:
-  - Hourly spin counts
-  - Purchase amounts and revenue
-  - Daily revenue aggregations
-  - User and country dimensions
+### Gold Layer
+- `aggregated_final_table`: Business-level aggregated metrics
+  - Combines purchases and spins data
+  - Provides hourly and daily metrics per user and country
+  - Includes calculations like total revenue, average revenue per purchase, etc.
 
 ## Data Quality Framework
 
-The pipeline implements extensive data quality checks:
+Data validation happens at multiple levels:
 
-1. **Column-level validations**:
-   - Type checking
-   - Non-null constraints
-   - Value range validations
-   - Format validations (regex patterns)
+1. **Source data validation** (scripts/task1_task2.py):
+   - Great Expectations framework to validate incoming data
+   - Schema validation, type checking, and business rule validation
 
-2. **Table-level tests**:
-   - Row count validations
-   - Uniqueness constraints
-   - Referential integrity
+2. **Silver layer validation** (DBT models):
+   - Column-level tests (not_null, unique, data types)
+   - Relationship tests between tables
+   - Value validation (e.g., revenue must be positive)
+   - Freshness checks to ensure data is current
 
-3. **Business logic validations**:
-   - Metric relationship validations
-   - Aggregation consistency
-   - Temporal validations
+3. **Gold layer validation** (DBT models):
+   - Business rule validation
+   - Cross-table consistency checks
+   - Aggregation integrity tests
+   - Statistical distribution checks
 
-4. **Freshness checks**:
-   - Silver data freshness (10-30 minutes)
-   - Hourly data freshness (1-3 hours)
-   - Daily aggregation completeness
+When validation fails:
+- Critical issues stop the pipeline and alert via Slack
+- Warnings are logged for review but allow the pipeline to continue
+- All issues are documented in logs and DBT test results
 
 ## Usage
 
 ### Running the Pipelines
 
-1. **Manual Triggering**:
-   - Access Airflow UI at http://localhost:8080
-   - Login with your credentials
-   - Navigate to DAGs
-   - Trigger `process_bronze_and_silver_layer` or `hourly_processing_pipeline`
+The pipelines are scheduled to run automatically, but you can also trigger them manually:
 
-2. **Backfill Processing**:
-   - Set DAG run configuration parameters:
-     ```json
-     {
-       "is_full_refresh": true,
-       "backfill_start_date": "2023-01-01 00:00:00",
-       "backfill_end_date": "2023-01-31 23:59:59"
-     }
-     ```
-
-### Monitoring & Troubleshooting
-
-1. **Check DAG Logs**:
-   - Access Airflow UI
-   - Navigate to DAG > Graph View
-   - Click on specific task and select "Logs"
-
-2. **Verify DBT Tests**:
+1. 5-minute pipeline:
    ```bash
-   cd dbt/playstudio_project
-   dbt test
+   airflow dags trigger five_mins_processing_pipeline
    ```
 
-3. **Data Quality Reporting**:
-   - Check test failures in Airflow logs
-   - Review DBT test results
+2. Hourly pipeline:
+   ```bash
+   airflow dags trigger hourly_processing_pipeline
+   ```
+
+### Running Backfills
+
+To process historical data:
+
+```bash
+airflow dags backfill \
+  --start-date 2023-01-01 \
+  --end-date 2023-01-02 \
+  five_mins_processing_pipeline
+```
+
+### Running DBT Models Manually
+
+```bash
+cd pipelines/dbt/playstudio_project
+dbt run --select silver_purchases silver_spins_hourly
+dbt run --select aggregated_final_table
+dbt test
+```
+
+## Monitoring and Troubleshooting
+
+- **Airflow UI**: Check task status and logs
+- **DBT documentation**: View data lineage and test results
+- **Database inspection**: Query the tables directly to verify data
+
+Common issues and resolutions:
+- Database connection errors: Check environment variables and network connectivity
+- Data validation failures: Inspect the source data for anomalies
+- Airflow scheduling issues: Check for DAG conflicts or resource constraints
 
 ## Maintenance
 
-### Adding New Source Data
+### Adding New Data Sources
 
-1. Update the relevant source configuration in:
-   - `dbt/playstudio_project/models/sources.yml`
-   - `utils/pipeline_utils.py` DB_CONFIG dictionary
-
-2. Create new bronze and silver models
-
-3. Update the gold layer aggregations
+1. Update the source extraction logic in `pipeline_utils.py`
+2. Create new bronze and silver models in DBT
+3. Modify the gold layer model to incorporate the new data
+4. Add appropriate tests for data validation
 
 ### Updating Dependencies
 
-```bash
-# Update DBT packages
-cd dbt/playstudio_project
-dbt deps
-
-# Update Python dependencies
-pip install --upgrade -r requirements.txt
-```
+The project dependencies are specified in:
+- `requirements.txt` for Python packages
+- `packages.yml` for DBT packages
 
 ## Project Structure
 
 ```
-.
-├── dags/
-│   ├── 5mins_processing_pipeline.py
-│   ├── hourly_processing_pipeline.py
-│   └── utils/
-│       └── pipeline_utils.py
-        └── slack_alert.py
-├── dbt/
-│   └── playstudio_project/
-│       ├── models/
-│       │   ├── bronze_layer/
-│       │   ├── silver_layer/
-│       │   │   ├── silver_purchases.sql
-│       │   │   ├── silver_purchases.yml
-│       │   │   ├── silver_spins_hourly.sql
-│       │   │   └── silver_spins_hourly.yml
-│       │   └── gold_layer/
-│       │       ├── aggregated_final_table.sql
-│       │       └── aggregated_final_table.yml
-│       ├── packages.yml
-│       └── dbt_project.yml
-├── docker-compose.yml
-├── .env.example
-└── README.md
+playstudio-data-pipeline/
+├── scripts/
+│   ├── data_source/
+│   │   └── MOC.xlsx              # Source data
+│   ├── utils/
+│   │   └── excel_utils.py        # Excel processing utilities
+│   ├── task1_task2.py            # Initial data processing script
+│   └── prepare_env.py            # Environment setup script
+│
+├── pipelines/
+│   ├── dags/
+│   │   ├── five_mins_processing_pipeline.py  # 5-minute DAG
+│   │   ├── hourly_processing_pipeline.py     # Hourly DAG
+│   │   └── utils/
+│   │       ├── pipeline_utils.py             # Shared utilities
+│   │       └── slack_alert.py                # Alerting functionality
+│   │
+│   ├── dbt/
+│   │   └── playstudio_project/
+│   │       ├── models/
+│   │       │   ├── silver_layer/
+│   │       │   │   ├── silver_purchases.sql
+│   │       │   │   ├── silver_purchases.yml  # Data quality tests
+│   │       │   │   ├── silver_spins_hourly.sql
+│   │       │   │   └── silver_spins_hourly.yml
+│   │       │   │
+│   │       │   └── gold_layer/
+│   │       │       ├── aggregated_final_table.sql
+│   │       │       └── aggregated_final_table.yml
+│   │       │
+│   │       ├── dbt_project.yml
+│   │       └── packages.yml
+│   │
+│   ├── docker-compose.yaml       # Infrastructure definition
+│   ├── Dockerfile                # Airflow container setup
+│   └── requirements.txt          # Python dependencies
+│
+└── .env                          # Environment variables
 ```
 
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests to ensure quality
+2. Create a feature branch: `git checkout -b feature-name`
+3. Commit your changes: `git commit -m 'Add feature'`
+4. Push to the branch: `git push origin feature-name`
 5. Submit a pull request
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License - see the LICENSE file for details.

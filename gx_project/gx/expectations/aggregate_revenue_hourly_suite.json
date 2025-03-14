@@ -1,9 +1,0 @@
-{
-  "expectations": [],
-  "id": "ba1a6b00-bd1c-411a-82ad-331083a98a0a",
-  "meta": {
-    "great_expectations_version": "1.2.4"
-  },
-  "name": "aggregate_revenue_hourly_suite",
-  "notes": null
-}

@@ -1,7 +1,0 @@
-[2025-03-11T16:28:41.692+0000] {processor.py:157} INFO - Started process (PID=1099) to work on /opt/airflow/dags/process_bronze_and_silver_pipeline.py
-[2025-03-11T16:28:41.693+0000] {processor.py:829} INFO - Processing file /opt/airflow/dags/process_bronze_and_silver_pipeline.py for tasks to queue
-[2025-03-11T16:28:41.694+0000] {logging_mixin.py:154} INFO - [2025-03-11T16:28:41.693+0000] {dagbag.py:536} INFO - Filling up the DagBag from /opt/airflow/dags/process_bronze_and_silver_pipeline.py
-[2025-03-11T16:28:41.888+0000] {processor.py:839} INFO - DAG(s) dict_keys(['process_bronze_and_silver_layer']) retrieved from /opt/airflow/dags/process_bronze_and_silver_pipeline.py
-[2025-03-11T16:28:41.939+0000] {logging_mixin.py:154} INFO - [2025-03-11T16:28:41.939+0000] {dag.py:2941} INFO - Sync 1 DAGs
-[2025-03-11T16:28:41.948+0000] {logging_mixin.py:154} INFO - [2025-03-11T16:28:41.948+0000] {dag.py:3722} INFO - Setting next_dagrun for process_bronze_and_silver_layer to 2025-03-11T16:25:00+00:00, run_after=2025-03-11T16:30:00+00:00
-[2025-03-11T16:28:41.966+0000] {processor.py:179} INFO - Processing /opt/airflow/dags/process_bronze_and_silver_pipeline.py took 0.277 seconds
